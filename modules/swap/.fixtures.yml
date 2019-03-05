@@ -1,0 +1,9 @@
+---
+fixtures:
+  repositories:
+    augeasproviders_core: https://github.com/simp/augeasproviders_core
+    augeasproviders_sysctl: https://github.com/simp/augeasproviders_sysctl
+    simplib: https://github.com/simp/pupmod-simp-simplib.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+  symlinks:
+    swap: "#{source_dir}"

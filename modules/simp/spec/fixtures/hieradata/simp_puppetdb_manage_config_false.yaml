@@ -1,0 +1,10 @@
+---
+# This setting (which exists in the sample SIMP server config,
+# puppet.your.domain.yaml) is required to avoid conflicts in the
+# management of the puppet service by pupmod::master::base and
+# puppetdb::master::config.
+puppetdb::master::config::restart_puppet: false
+
+# This setting means the user has decided to manage puppetdb config
+# outside of puppetdb::master::config.
+puppetdb::master::config::manage_config: false

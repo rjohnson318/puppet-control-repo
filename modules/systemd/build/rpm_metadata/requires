@@ -1,0 +1,2 @@
+Requires: pupmod-puppetlabs-stdlib >= 4.13.1
+Requires: pupmod-puppetlabs-stdlib < 6.0.0

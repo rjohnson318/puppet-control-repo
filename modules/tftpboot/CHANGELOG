@@ -1,0 +1,145 @@
+* Thu Sep 13 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 6.2.0-0
+- Added Puppet 5 and OEL support
+
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.2.0-0
+- Update Hiera 4 to Hiera 5
+
+* Tue Apr 24 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
+- Added support for UEFI PXEboot.
+  - Added tftpboot::linux_model_efi.
+    Added tftpboot::assign_host_efi.
+  - Tested primarily on CentOS 7 (grub2). Testing of CentOS 6 UEFI
+    boot with legacy grub is **pending**.
+- **Moved** the tftproot root directory from /tftpboot to /var/lib/tftpboot
+  to satisfy the STIG RHEL-07-040520 check.
+- Added tftpboot::tftpboot_root_dir to allow users to override
+  the new default root directory (e.g., to set it back to /tftpboot).
+- Added tftpboot::linux_install_dir and tftpboot::package_ensure
+  to allow more fine-grained control of this module.
+- Explicitly set selinux context on tfptboot files/directories to
+  tftpdir_t in order to restrict their access to read-only tftpd
+  operation.
+- Internally, refactored configuration to use small, private classes.
+
+* Tue Dec 05 2017 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.0.2-0
+- Update README.md from puppet strings
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+- Confine puppet version in metadata.json
+
+* Wed Dec 14 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.0-0
+- Use simp_options module for global catalysts
+- Use strongly typed parameters
+
+* Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Updated to use the environment-aware rsync in SIMP 6
+
+* Tue Nov 22 2016 Jeanne Greulich <jgreulich@onypoint.com> - 5.0.0-0
+- bump major version for SIMP6
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.3-0
+- Remove compliance_map and  general housekeeping
+
+* Mon Jul 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.2-0
+- Migration to semantic versioning and fix of the build system
+
+* Wed May 11 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.1-0
+- Inclusion of FIPS in the initrd kickstart option list is now optional.
+  By default, we no longer set fips=1 in initrd.
+
+* Wed Mar 02 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.0-9
+- Minor linting fixes
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-8
+- migration to simplib and simpcat (lib/ only)
+
+* Mon Jul 27 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-7
+- Updated to use the system-provided files where possible.
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-6
+- Changed puppet-server requirement to puppet
+
+* Mon Dec 15 2014 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-5
+- Made purging pxelinux.cfg optional.
+
+* Tue Aug 12 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-4
+- Allow FIPS to be enabled/disabled via hiera.
+
+* Thu Jul 10 2014 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-3
+- Diabled FIPS (for now).
+
+* Sun Jun 22 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-2
+- Removed MD5 file checksums for FIPS compliance.
+- Added FIPS enabling to TFTP boot profile.
+
+* Mon Apr 14 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-1
+- Collapsed tftpboot::service into tftpboot
+
+* Tue Jan 14 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-0
+- Update to tftpboot::assign_host to explicitly set the owner, group,
+  and mode.
+
+* Thu Jan 09 2014 Nick Markowski <nmarkowski@keywcorp.com> - 2.1.0-0
+- Updated module for puppet3/hiera compatibility, and optimized code for lint tests,
+  and puppet-rspec.
+- Fixed permissions issue on pxe template.
+
+* Tue Oct 08 2013 Kendall Moore <kmoore@keywcorp.com> - 2.0.0-9
+- Updated all erb templates to properly scope variables.
+
+* Mon Feb 25 2013 Maintenance
+2.0.0-8
+- Added a call to $::rsync_timeout to the rsync call since it is now required.
+- Create a Cucumber test which ensures that the xinetd service is running, the tftpboot file is in place, and puppet runs successfully.
+
+* Wed Jul 25 2012 Maintenance
+2.0.0-7
+- Removed the tidy->file loop.
+
+* Wed Apr 11 2012 Maintenance
+2.0.0-6
+- Moved mit-tests to /usr/share/simp...
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Mar 02 2012 Maintenance
+2.0.0-5
+- Improved test stubs.
+
+* Mon Dec 26 2011 Maintenance
+2.0.0-4
+- Updated the spec file to not require a separate file list.
+- Scoped all of the top level variables.
+
+* Mon Dec 05 2011 Maintenance
+2.0.0-3
+- Modified the upcase/downcase match to work with an array match puppet > 2.6
+
+* Fri Aug 12 2011 Maintenance
+2.0.0-2
+- Added some notes about probably wanting 'ksdevice=bootif\nIPAPPEND 2' in
+  'extra' if you're kickstarting.
+
+* Tue Mar 29 2011 Maintenance - 2.0.0-1
+- The tftpboot module now expects to have an associated rsync space that is
+  password protected.
+- Updated to use rsync native type
+
+* Tue Jan 11 2011 Maintenance
+2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Maintenance - 1-1
+- Converting all spec files to check for directories prior to copy.
+
+* Tue May 25 2010 Maintenance
+1.0-0
+- Removed unnecessary variable.
+- Code refactoring.
+
+* Sat Feb 13 2010 Maintenance
+0.2-3
+- Fixed the annoying preceeding spaces.
+
+* Fri Jan 15 2010 Maintenance
+0.2-2
+- Now properly set group of tftpboot files to 'nobody'

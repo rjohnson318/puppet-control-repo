@@ -1,0 +1,6 @@
+---
+simp_options::trusted_nets :
+  - 1.2.3.4
+  - 5.6.7.8
+simp_options::rsync::server : 'rsync.bar.baz'
+simp_options::rsync::timeout : 1

@@ -1,0 +1,202 @@
+<%
+  unless @main_msg_queue_size
+    # The number of 512 byte messages that can fit into 1% of the total system memory. Or 2 gig max.
+    _main_msg_queue_size = [(([@facts['memorysize_mb'].to_i, 128].max * 1048576 * 0.01)/512).to_i,2097152].min
+  else
+    _main_msg_queue_size = @main_msg_queue_size
+  end
+
+  _main_msg_queue_high_watermark = @main_msg_queue_high_watermark
+  unless @main_msg_queue_high_watermark
+    _main_msg_queue_high_watermark = (_main_msg_queue_size * 0.90).round
+  end
+
+  _main_msg_queue_low_watermark = @main_msg_queue_low_watermark
+  unless @main_msg_queue_low_watermark
+    _main_msg_queue_low_watermark = (_main_msg_queue_size * 0.70).round
+  end
+
+  if @main_msg_queue_discardmark
+    _main_msg_queue_discardmark = @main_msg_queue_discardmark
+  else
+    if !@main_msg_queue_discardmark || (_main_msg_queue_discardmark < _main_msg_queue_high_watermark)
+    _main_msg_queue_discardmark = (_main_msg_queue_size * 0.98).round
+    end
+  end
+
+  _main_msg_queue_worker_thread_minimum_messages = @main_msg_queue_worker_thread_minimum_messages
+  unless @main_msg_queue_worker_thread_minimum_messages
+    _main_msg_queue_worker_thread_minimum_messages =
+      _main_msg_queue_size / (([@facts['processorcount'].to_i, 2].max - 1)*4)
+  end
+
+  _main_msg_queue_worker_threads = @main_msg_queue_worker_threads
+  unless @main_msg_queue_worker_threads
+    _main_msg_queue_worker_threads = [@facts['processorcount'].to_i - 1, 1].max
+  end
+
+  _main_msg_queue_max_disk_space = @main_msg_queue_max_disk_space
+  unless @main_msg_queue_max_disk_space
+    _main_msg_queue_max_disk_space = "#{(_main_msg_queue_size / 1024).round}M"
+  end
+
+  _dns_enable = 'on'
+  if @disable_remote_dns
+    _dns_enable = 'off'
+  end
+-%>
+<%
+  # Create a boolean translation hash for true/false -> on/off
+  t_bool_xlat = {
+    true  => 'on',
+    false => 'off'
+  }
+-%>
+$UMASK <%= @umask %>
+$LocalHostName <%= @localhostname %>
+$EscapeControlCharactersOnReceive <%= @escape_control_characters_on_receive %>
+$ControlCharacterEscapePrefix <%= @control_character_escape_prefix %>
+$ActionFileDefaultTemplate <%= @_default_template %>
+$RepeatedMsgReduction <%= @repeated_msg_reduction %>
+
+global(
+  preserveFQDN="<%= t_bool_xlat[@preserve_fqdn] %>"
+  dropMsgsWithMaliciousDnsPTRRecords="<%= @drop_msgs_with_malicious_dns_ptr_records %>"
+  workDirectory="<%= @work_directory %>"
+<%
+  if @facts['rsyslogd'] && @facts['rsyslogd']['version']
+    if scope.call_function('versioncmp', [@facts['rsyslogd']['version'], '8.6.0']) >= 0
+-%>
+  net.permitACLWarning="<%= t_bool_xlat[@suppress_noauth_warn] %>"
+  net.enableDNS="<%= _dns_enable %>"
+<%
+    end
+  end
+-%>
+)
+<%
+  if @facts['rsyslogd'] && @facts['rsyslogd']['version']
+    if scope.call_function('versioncmp', [@facts['rsyslogd']['version'], '7.0.0']) >= 0
+-%>
+
+module(load="imklog")
+<%
+    end
+  end
+-%>
+
+module(load="imuxsock"
+  SysSock.IgnoreTimestamp="<%= t_bool_xlat[@syssock_ignore_timestamp] %>"
+  SysSock.IgnoreOwnMessages="<%= t_bool_xlat[@syssock_ignore_own_messages] %>"
+  SysSock.Use="<%= t_bool_xlat[@syssock_use] %>"
+<% if @syssock_name -%>
+  SysSock.Name="<%= @syssock_name %>"
+<% end -%>
+  SysSock.FlowControl="<%= t_bool_xlat[@syssock_flow_control] %>"
+  SysSock.UsePIDFromSystem="<%= t_bool_xlat[@syssock_use_pid_from_system] %>"
+<% if @syssock_rate_limit_interval -%>
+  SysSock.RateLimit.Interval="<%= @syssock_rate_limit_interval %>"
+<% end -%>
+<% if @syssock_rate_limit_burst -%>
+  SysSock.RateLimit.Burst="<%= @syssock_rate_limit_burst %>"
+<% end -%>
+<% if @syssock_rate_limit_severity -%>
+  SysSock.RateLimit.Severity="<%= @syssock_rate_limit_severity %>"
+<% end -%>
+  SysSock.UseSysTimeStamp="<%= t_bool_xlat[@syssock_use_sys_timestamp] %>"
+  SysSock.Annotate="<%= t_bool_xlat[@syssock_annotate] %>"
+  SysSock.ParseTrusted="<%= t_bool_xlat[@syssock_parse_trusted] %>"
+  SysSock.Unlink="<%= t_bool_xlat[@syssock_unlink] %>"
+)
+
+<% if @_read_journald -%>
+$ModLoad imjournal
+$IMJournalStateFile imjournal.state
+<% end -%>
+
+module(load="imfile")
+<% if @_tls_tcp_server -%>
+
+<%  if @_tcp_listen_port -%>
+module(load="imptcp")
+input(type="imptcp" port="<%= @_tcp_listen_port %>")
+<%  end -%>
+module(load="imtcp"
+  StreamDriver.Mode="<%= @action_send_stream_driver_mode %>"
+  StreamDriver.AuthMode="<%= @_action_send_stream_driver_auth_mode %>"
+  PermittedPeer=[<%= @tls_input_tcp_server_stream_driver_permitted_peers.map{|x| %Q{"#{x}"}}.join(',') %>]
+  MaxSessions="<%= @tls_tcp_max_sessions %>"
+)
+input(type="imtcp" port="<%= @_tls_tcp_listen_port %>")
+<% elsif @_tcp_server -%>
+module(load="imtcp")
+<%   if @_tcp_listen_port -%>
+input(type="imtcp" port="<%= @_tcp_listen_port %>")
+<%   end
+   end
+
+   if @_udp_server
+-%>
+
+module(load="imudp")
+input(type="imudp"
+  port="<%= @_udp_listen_port %>"
+)
+<% end
+   if @_enable_tls_logging || @_tls_tcp_server -%>
+
+# These are legacy because CertFile has not been implemented in the new RainerScript.
+$DefaultNetstreamDriverCertFile <%= @default_net_stream_driver_cert_file %>
+$DefaultNetstreamDriver <%= @default_net_stream_driver %>
+$DefaultNetstreamDriverCAFile <%= @default_net_stream_driver_ca_file %>
+$DefaultNetstreamDriverKeyFile <%= @default_net_stream_driver_key_file %>
+<% end -%>
+
+<%
+  if @facts['rsyslogd'] && @facts['rsyslogd']['version']
+    if scope.call_function('versioncmp', [@facts['rsyslogd']['version'], '8.0.0']) >= 0
+-%>
+main_queue(
+  queue.type="<%= @main_msg_queue_type %>"
+  queue.filename="<%= @main_msg_queue_filename %>"
+  queue.maxfilesize="<%= @main_msg_queue_max_file_size %>M"
+  queue.size="<%= _main_msg_queue_size %>"
+  queue.highwatermark="<%= _main_msg_queue_high_watermark %>"
+  queue.lowwatermark="<%= _main_msg_queue_low_watermark %>"
+  queue.discardmark="<%= _main_msg_queue_discardmark %>"
+  queue.workerthreadminimummessages="<%= _main_msg_queue_worker_thread_minimum_messages %>"
+  queue.workerthreads="<%= _main_msg_queue_worker_threads %>"
+  queue.timeoutenqueue="<%= @main_msg_queue_timeout_enqueue %>"
+  queue.dequeueslowdown="<%= @main_msg_queue_dequeue_slowdown %>"
+  queue.saveonshutdown="<%= @main_msg_queue_save_on_shutdown %>"
+  queue.maxdiskspace="<%= _main_msg_queue_max_disk_space %>"
+)
+<%   else -%>
+
+$MainMsgQueueType <%= @main_msg_queue_type %>
+$MainMsgQueueFilename <%= @main_msg_queue_filename %>
+$MainMsgQueueMaxFileSize <%= @main_msg_queue_max_file_size %>M
+$MainMsgQueueSize <%= _main_msg_queue_size %>
+$MainMsgQueueHighWatermark <%= _main_msg_queue_high_watermark %>
+$MainMsgQueueLowWatermark <%= _main_msg_queue_low_watermark %>
+$MainMsgQueueDiscardMark <%= _main_msg_queue_discardmark %>
+$MainMsgQueueWorkerThreadMinimumMessages <%= _main_msg_queue_worker_thread_minimum_messages %>
+$MainMsgQueueWorkerThreads <%= _main_msg_queue_worker_threads %>
+$MainMsgQueueTimeoutEnqueue <%= @main_msg_queue_timeout_enqueue %>
+$MainMsgQueueDequeueSlowdown <%= @main_msg_queue_dequeue_slowdown %>
+$MainMsgQueueSaveOnShutdown <%= @main_msg_queue_save_on_shutdown %>
+$MainMsgQueueMaxDiskSpace <%= _main_msg_queue_max_disk_space %>
+<%   end -%>
+<% end -%>
+
+<%
+   if @_enable_tls_logging
+     if !@facts['rsyslogd'] || (@facts['rsyslogd']['version'] && scope.call_function('versioncmp', [@facts['rsyslogd']['version'], '8.0.0']) < 0)
+-%>
+# For Rsyslog 7, sending of TLS-encrypted messages does not work unless
+# this legacy, global config is set in addition to individual send stream
+# driver settings
+# TODO: Remove when support for Rsyslog 7 is dropped
+$ActionSendStreamDriverMode <%= @action_send_stream_driver_mode %>
+<%   end -%>
+<% end -%>

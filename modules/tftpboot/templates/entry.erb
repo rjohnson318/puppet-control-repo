@@ -1,0 +1,6 @@
+<% _fips = 0 -%>
+<% _fips = 1 if @fips -%>
+default 0
+label 0
+        kernel <%= @kernel %>
+        append initrd=<%= @initrd %> ks=<%= @ks %> fips=<%= _fips %> <% if @extra then %><%= @extra %><% end %>

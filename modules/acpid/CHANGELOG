@@ -1,0 +1,30 @@
+* Mon Oct 29 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 1.0.3-0
+- asset updates for Puppet 5
+
+* Sun Mar 04 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.3-0
+- Validate functionality under Puppet 5
+- Test against Oracle Enterprise Linux
+- Change default state of the acpid package to reference
+  `simp_options::package_ensure`, defaulting to `installed`
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 1.0.2-0
+- Confine puppet version in metadata.json
+
+* Tue Dec 13 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.1-0
+- Strong typed the module
+
+* Wed Dec 07 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.1-0
+- Removed hiera fixture simp.yaml
+- Updated README per SIMP-2213
+
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich@onyxpoint.com> - 1.0.0-0
+- Bump major  version number for SIMP 6
+
+* Wed Jul 06 2016 Nick Miller <nick.miller@onyxpoint.com> - 0.0.2-0
+- Updated README and moved to the new packaging format
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-1
+- Updated to require puppet
+
+* Fri Apr 04 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-0
+- Initial Release

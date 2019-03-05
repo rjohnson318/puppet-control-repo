@@ -1,0 +1,39 @@
+<%
+max_multiport_length = 15
+
+trusted_nets = Array(@trusted_nets).flatten
+allow_all = (trusted_nets.include?('any') || trusted_nets.include?('ALL'))
+
+dports = Array(@dports).flatten.map(&:to_s).uniq.sort
+all_dports = (dports.include?('any') || dports.include?('ALL'))
+
+port_slices = scope.function_slice_array([dports,max_multiport_length,':'])
+
+output_base = "-m state --state NEW"
+if @_protocol == 'tcp'
+  output_base = output_base += " -m tcp -p tcp"
+else
+  output_base = output_base += " -p udp"
+end
+
+output = []
+
+if all_dports && allow_all
+  output << "#{output_base} -j ACCEPT"
+elsif all_dports && !allow_all
+  trusted_nets.each do |n|
+    output << "#{output_base} -s #{n} -j ACCEPT"
+  end
+elsif !all_dports && allow_all
+  port_slices.each do |slice|
+    output << "#{output_base} -m multiport --dports #{slice.join(',')} -j ACCEPT"
+  end
+else
+  trusted_nets.each do |n|
+    port_slices.each do |slice|
+      output << "#{output_base} -s #{n} -m multiport --dports #{slice.join(',')} -j ACCEPT"
+    end
+  end
+end
+-%>
+<%= output.join("\n") %>

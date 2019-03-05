@@ -1,0 +1,16 @@
+---
+version: 5
+defaults:
+  datadir: data
+  data_hash: yaml_data
+hierarchy:
+  - name: "OSFamily + Release"
+    path: "family_release/%{facts.osfamily}-%{facts.operatingsystemmajrelease}.yaml"
+  - name: "OS"
+    path: "os/%{facts.operatingsystem}.yaml"
+  - name: "OS Family"
+    path: "osfamily/%{facts.osfamily}.yaml"
+  - name: "Virtual"
+    path: "virtual/%{facts.virtual}.yaml"
+  - name: "Common"
+    path: "common.yaml"

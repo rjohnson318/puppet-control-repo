@@ -1,0 +1,70 @@
+# The testing matrix considers ruby/puppet versions supported by SIMP and PE:
+# ------------------------------------------------------------------------------
+#  release    pup   ruby      eol
+# PE 2017.2   4.10.4  2.1.9  TBD
+---
+language: ruby
+cache: bundler
+sudo: false
+
+bundler_args: --without development system_tests --path .vendor
+
+notifications:
+  email: false
+
+addons:
+  apt:
+    packages:
+      - rpm
+
+before_install:
+  - rm -f Gemfile.lock
+
+jobs:
+  include:
+    - stage: check
+      rvm: 2.4.4
+      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5"
+      script:
+        - bundle exec rake check:dot_underscore
+        - bundle exec rake pkg:check_version
+        - bundle exec rake metadata_lint
+        - bundle exec rake compare_latest_tag
+        - bundle exec puppet module build
+
+    - stage: spec
+      rvm: 2.4.4
+      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5.0"
+      script:
+        - bundle exec rake spec
+
+    - stage: spec
+      rvm: 2.1.9
+      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.10.4"
+      script:
+        - bundle exec rake spec
+
+    # This needs to be last since we have an acceptance test
+    - stage: deploy
+      rvm: 2.4.4
+      script:
+        - true
+      before_deploy:
+        - "export PUPMOD_METADATA_VERSION=`ruby -r json -e \"puts JSON.parse(File.read('metadata.json')).fetch('version')\"`"
+        - '[[ $TRAVIS_TAG =~ ^simp-${PUPMOD_METADATA_VERSION}$|^${PUPMOD_METADATA_VERSION}$ ]]'
+      deploy:
+        - provider: releases
+          api_key:
+            secure: "JvePksE1tLcRP93AuDqA1+mt7rJuEytBtm4QSsFd1qC2yxWZIF1q3Dzic+nqEgZlCNHa6lv2Tdk17uiZh/7Ct7lEKT+mKtgQveNvgOQ4PevrX4ueLBtLebwBBd/LDpWA+yIlrLKdwbg46KvWnMF5bDE4ZYoOb7eDc/5VaK3Foujn/JuOLzdN7xabLZRJxJRSzdjlYGRCqIWcvMW7dby91wMgjeB01gOIHIOisKfIMG3GIHMBeao5eir0K13ATdvosBByte/xOfPymapMq4bz8YuOMUVqG+9uXQsVfVXNF5rmIFfZis0BQFVSq6LfgakJN2dHolS49sI/fXJaCUyuwUd6Ipd2klsZ3SkRw2XGO68FNaKIckELNV2gbhZkBLo5TvZflU8LGwTzG2MZCIAzpN3rjXy4alG203YDNmO9abyse5BBPKWUBm96A68TVffE0mq9v9lUaZkJdsIhJQFMrkyCj9wkxpODGSHMMZXhjOK4lR+ySXo2h/kD48SrNkHvfn4TqeP/c/u7dnTzhTVLAMaLcqX1ZdBjz4VExtSwsHYOcqDss8NMeQ0aQIC1zPhoOpW91fflBnREG1XTfQY49vIqR/m+vgllgPh03p/SN+LFuYLhg7Yzl3HwC2afrjVDxUXMz6dWb/rQwGTtssXixWgUL2xGrskbk/J7n1pHy/o="
+          skip_cleanup: true
+          on:
+            tags: true
+            condition: '($SKIP_FORGE_PUBLISH != true)'
+        - provider: puppetforge
+          user: simp
+          password:
+            secure: "J1UQKsQ6bMntRJwr+RSTFOMAeU5+nEcliPui12pZ0hReA0Jnta2E7LffA4Q0rdishA2bh8vSgz44UM+FTjbKaDcnIXlfbAEs38D6btKWSpmvN8ylfETNJM/LePrkb41VZKK7kFO0UObVy6JhOCpxLhynv2DQpmN9du+e4jhYQwmlW5Y+93yTqPIba4cbLxpVW9IMvMVC21W/P4Mk8orYjYslAQJS4vDrQf3poNRMoYiyhyu/Zc109SCETgd+T+TKwnM/yWzCC58nsEdg2q74WdPsdKwc4weFrshwllCnWjOXjjpXN6iId6BGmUoquxL5Jsry0fcEwvZdhB2Yc4AuJbd7j+oBx7lnvJcIM+0hbVgdeBx9p24vkht6axhlJ9JxfqWmIfNe/J4pyWaXTK1gasmMBOqutY8nmO6NJV5kFJ857ci3XcczR46RyurYMVms+ZPyi+G7wmCivQ/cpyQSc6jO6YjzA+DXlKlBKkoyL8r47XuhBtGSwv5ZpGKdWpzesfOCfPzXHTSuDnZ88+LfJ1kBoiEp4CuhD/olKHmPz/7HKEUIA++NoHtIp8puazM3kKCOCQNEzGQx+wcstJyblvBuqXAXT01WHx1MYpADjbZGQX0heNSYawSc5EEIa+r5BgKYaNKFxrGuRume376zEwm2n1ptnM6AbnWt4dalSqY="
+          on:
+            tags: true
+            rvm: 2.4.1
+            condition: '($SKIP_FORGE_PUBLISH != true)'

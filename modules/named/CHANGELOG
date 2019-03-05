@@ -1,0 +1,173 @@
+* Thu Nov 01 2018 Jeanne Greulich <jeanne,greulich@onyxpoint.com> - 6.1.0-0
+- Static asset updates for puppet 5
+- Update badges and contribution guide URL in README.md
+
+* Fri Oct 12 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
+- Changed $named::install::ensure from 'latest' to 'installed'
+  - It will also respect `simp_options::package_ensure`
+
+* Wed Jul 11 2018 Adam Yohrling <adam.yohrling@onyxpoint.com> - 6.1.0-0
+- Support for Puppet5/OEL
+- Resolved issue with chroot acceptance tests
+
+* Fri Mar 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.3-0
+- Provide override file for named-chroot.service instead of
+  modifying the vendor-provided service file.
+- Use simplib::assert_metadata() for OS validation
+- Replace Puppet3 version of passgen() with  simplib::passgen()
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.2-0
+- Confine puppet version in metadata.json
+
+* Fri Apr 07 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.1-0
+- Chroot rsync files are now globbed so they are placed directly
+  inside of the specified chroot.
+
+* Mon Dec 19 2016 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- Updated global catalysts and strong typed the module
+- Made chrooting logic less complicated
+- ALL of the spec tests
+
+* Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Updated to use the environment-aware rsync in SIMP 6
+
+* Fri Nov 18 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
+- Updated to compliance_markup version 2
+
+* Tue Nov 15 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 5.0.0-0
+- Updated iptables dependency version
+
+* Thu Oct 13 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.0-0
+- Updated to use the deconflicted 'simpcat'
+
+* Tue Oct 11 2016 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 4.3.3-0
+- This patch corrects the following shortcomings to ensure compatability
+  with Red Hat Enterprise Linux 7 and its clones:
+    - Ensures all required directories exist in the chroot
+    - Remove dependencies for the non-existent `named-chroot-setup.service`
+    - Use new-style daemon invocation, executing in the foreground and
+      logging to stderr.  See daemon(7).
+    - Since new-style daemons don't require a PID file, nor does the binary
+      generate one in foreground mode, remove it from the service file.
+
+* Wed Jul 06 2016 Nick Miller <nick.miller@onyxpoint.com> - 4.3.1-0
+- Changed the Exec['restart-systemd'] to Exec['systemctl-daemon-reload']
+  to avoid a conflict with puppetlabs-postgresql
+
+* Fri Apr 15 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.3.0-0
+- Created work-around for https://bugzilla.redhat.com/show_bug.cgi?id=1278082
+- Users can modify the chroot path in named-chroot.service
+- Asserted service, chroot, and non-chroot as private classes
+
+* Tue Feb 23 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.2.0-9
+- Added compliance function support
+
+* Thu Dec 03 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.0-8
+- `named::non_chroot` will now intentionally fail (with an informative message)
+  if included when selinux is not enforcing
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.2.0-7
+- migration to simplib and simpcat (lib/ only)
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-6
+- Changed puppet-server requirement to puppet
+
+* Mon Sep 15 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-5
+- Restricted the rsync of materials in /etc in non-chroot so that
+  users can't accidentally destroy the permissions on /etc itself.
+
+* Mon Jul 21 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-4
+- Updated to provide the appropriate pointers to the new rsync layout.
+
+* Wed Jul 02 2014 Kendall Moore <kmoore@keywcorp.com> - 4.2.0-3
+- Updated caching nameserver to be SELinux compatible.
+
+* Thu Jun 26 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-2
+- Added additional compatiblity with RHEL7 given the new named service
+  for chroot is called 'named-chroot'.
+
+* Sun Jun 22 2014 Kendall Moore <kmoore@keywcorp.com> - 4.2.0-1
+- Removed MD5 file checksums for FIPS compliance.
+
+* Fri Jun 20 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-1
+- Ensure that $named::auth_users is an Array.
+
+* Wed Apr 16 2014 Nick Markowski <nmarkowski@keywcorp.com> - 4.2.0-0
+- The caching-nameserver package has been rolled into bind; removing caching-nameserver
+  removes the bind package. Caching-nameserver no longer ensured absent.
+
+* Tue Apr 08 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+- Made several adjustments to make the rsync space more clear.
+- The chroot and non_chroot spaces now reference rsync/default (by
+  default), but 'default' can be changed in case you want a DNS server
+  with a whole different configuration.
+
+* Mon Mar 03 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-1
+- Refactored manifests to pass all lint tests.
+- Added rspec tests for test coverage.
+
+* Wed Feb 12 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
+- Converted all boolean strings to true booleans for Puppet 3
+  migration.
+
+* Fri Oct 25 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-2
+- Updated all 'source' File parameters to have 'modules' in their path
+  for Puppet 3 compatibility.
+
+* Mon Oct 07 2013 Kendall Moore <kmoore@keywcorp.com> 4.0.0-1
+- Updated all erb templates to properly scope variables.
+
+* Thu May 02 2013 Trevor Vaughan <tvaughan@onyxpoint.com> 4.0.0-0
+- Work done with Kendall Moore <kmoore@keywcorp.com>
+- Modify the named module so that named does not install into a chroot jail if
+  SELinux is enabled since these two states are incompatible (and unnecessary).
+
+* Mon Feb 25 2013 Maintenance
+2.0-6
+- Added a call to $::rsync_timeout to the rsync call since it is now required.
+
+* Wed Apr 11 2012 Maintenance
+2.0.0-5
+- Moved mit-tests to /usr/share/simp...
+- Fixed an issue with the caching DNS server where requisite files
+  were not being placed which was causing the DNS server to fail.
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Mon Mar 12 2012 Maintenance
+2.0.0-4
+- Updated tests for this module to work properly.
+- Improved test stubs.
+- Discovered that the DHCP caching nameserver was not putting the config file
+  in the correct location. Fixed.
+
+* Mon Jan 30 2012 Maintenance - 2.0.0-3
+- Added test stubs.
+
+* Mon Dec 19 2011 Maintenance - 2.0.0-2
+- Updated the spec file to not require a separate file list.
+- Updated the caching nameserver to work with the chrooted bind package since
+  the caching-nameserver package is removed from RHEL6 and both work with the
+  chrooted package.
+
+* Fri Feb 11 2011 Maintenance - 2.0.0-1
+- The named module now expects to have an associated rsync space that is
+  password protected.
+- Changed all instances of defined(Class['foo']) to defined('foo') per the
+  directions from the Puppet mailing list.
+- Updated to use rsync native type
+- Updated to use concat_build and concat_fragment types.
+
+* Tue Jan 11 2011 Maintenance
+2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Maintenance - 1-2
+- Converting all spec files to check for directories prior to copy.
+
+* Mon Oct 04 2010 Maintenance
+1.0-1
+- Addition of caching nameserver capability.
+
+* Fri May 21 2010 Maintenance
+1.0-0
+- Code refactor and doc update.

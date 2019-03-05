@@ -1,0 +1,369 @@
+* Fri Oct 26 2018 Adam Yohrling <adam.yohrling@onyxpoint.com> - 6.5.1-0
+- Add ssh_host_keys fact to gather configured `hostkey` values
+  from sshd
+- Loop through all hostkeys and manage permissions for security and
+  compliance
+
+* Fri Oct 12 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.5.0-0
+- Added the following package ensure parameters
+  - $ssh::client::package_ensure
+  - $ssh::server::server_ensure
+  - $ssh::server::ldap_ensure
+- Changed the defaults for all package ensures from 'latest' to the following:
+  - `simp_options::package_ensure` when that parameter is present
+  - 'installed' otherwise
+
+* Thu Oct 11 2018 Zach <turtles.be.the.best@gmail.com> - 6.5.0-0
+- Altered 00_default_spec.rb to stop deleting all ssh keys in test
+- Replaced puppet_environment with puppet_collection in nodesets
+
+* Tue Sep 11 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 6.5.0-0
+- Updated $app_pki_external_source to accept any string. This matches the
+  functionality of pki::copy.
+
+* Wed Aug 29 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.4.4-0
+- Added a Ssh::PermitRootLogin data type
+- Updated tests
+- Added a check to fail on EL6 if 'prohibit-password' is set since it is not
+  allowed on that platform.
+
+* Thu Aug 23 2018 Adam Yohrling <adam.yohrling@onyxpoint.com> - 6.4.4-0
+- Added support for Oracle Linux
+- Added support for Puppet 5
+
+* Mon Aug 20 2018 Bryan Howard <bryan@alumni.caltech.edu> - 6.4.4-0
+- PermitRootLogin accepts more values than 'yes' and 'no'. Add
+  support for 'without-password', 'prohibit-password', and
+  'forced-commands-only'.
+- It was not possible to set PasswordAuthentication to 'no'
+  because the conditional treated false the same as undef, which are
+  intended to be different.
+
+* Thu Aug 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.4.3-0
+- By default, do not specify the obsolete RhostsRSAAuthentication
+  configuration parameter in sshd_config on systems running openssh 7.4
+  or later.  Beginning with openshh 7.4, sshd emits an error message when
+  this parameter is present in sshd_config.
+
+* Thu May 03 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.4.2-0
+- Added some variables for sshd_config to meet STIG requirements.
+  Most are just confirmation of defaults with the exception of
+  ClientAliveInterval and ClientAliveMaxCount which have
+  been set to activate Client Alive checks.
+- Added compliance tests to install setting from compliance
+  markup module and then run inspec tests to check for compliance.
+- Update version range of auditd dependency in metadata.json
+
+* Wed Mar 14 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.4.1-0
+- Removed unused Augeas lens `sshd.aug`
+
+* Mon Mar 05 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.4.0-0
+- Re-implemented `ssh::client::host_config_entry` using `ssh_config`:
+  - Users can now customize additional SSH client options
+  - Customizing ssh_config is consistent with sshd_config
+  - Tweaked Augeas lens `ssh.aug` to handle `HostKeyAlgorithms` correctly
+  - No change to the module's API
+  - Removed concat + .erb templates from old implementation
+- Fixed idempotency bug with `/var/empty/sshd/etc/localtime`
+  - Removed vestigial SIMP-1143 workaround from acceptance tests
+- Fixed errors in README.md
+  - Ciphers and Usage sections rewritten and verified, with tests
+  - Added new environment variable `SIMP_SSH_report_dir` to acceptance tests
+    to validate ciphers in README
+  - Documented solution to SIMP-4440 and added acceptance test
+- Removed cruft:
+  - Removed grub from metadata.json and .fixtures.yml because nothing uses it
+  - Removed NSCD-related cruft (/etc/pam_ldap.conf) from ancient ldap code
+
+* Mon Feb 12 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.3.0-0
+- Update upperbound on puppetlabs/concat version to < 5.0.0
+
+* Fri Jan 19 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.3.0-0
+- If the host has joined an IPA domain, set
+  GSSAPIAuthentication to 'yes' in the ssh server and client
+  configuration files.
+
+* Wed Aug 30 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.2.1-0
+- Update to augeasproviders_grub 3
+
+* Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.2.1-0
+- Update concat version in metadata.json & build/rpm_metadata/requires
+
+* Tue Jun 20 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.2.0-0
+- Convert internally-used Puppet 3 functions to Puppet 4
+  - ssh_config_bool_translate is now ssh::config_bool_translate
+  - ssh_format_host_entry_for_sorting now ssh::format_host_entry_for_sorting
+- Create Puppet 4 versions of externally-used Puppet 3 functions and
+  mark the Puppet 3 functions as deprecated. They will be removed in
+  a later release.
+  - ssh_autokey should be replaced with ssh::autokey
+  - ssh_global_known_hosts should be replaced with ssh::global_known_hosts
+
+* Tue Mar 28 2017 Nicholas Hughes - 6.1.0-0
+- Set permissions back to what the RPM sets and security scans expect
+  - /etc/ssh/moduli
+  - /var/empty/sshd
+  - /var/empty/sshd/etc
+  - /var/empty/sshd/etc/localtime
+
+* Thu Mar 23 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.0-0
+- Reverted 'ssh::server::conf::trusted_nets' to 'ALL' by default to prevent
+  lockouts from cloud systems
+
+* Mon Mar 20 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+- move passgen to Puppet[:vardir]
+
+* Thu Mar 9 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 6.0.1-0
+- Remove some utf-8 smart quotes that were accidentally added to
+  host_config_entry.pp
+
+* Thu Feb 23 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.0.1-0
+- Changed the default UsePrivilegeSeparation setting in sshd_config to use the
+  vendor default of 'sandbox'
+- Changed the default value of simp_options::trusted_nets to ['ALL'] to prevent
+  permanent lockouts when a console isn't available.
+
+* Thu Jan 19 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- Updated pki scheme, application certs now managed in
+  /etc/pki/simp_apps/sshd/x509
+
+* Tue Jan 10 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Updated to use CTR ciphers instead of CBC as a fallback
+
+* Tue Dec 20 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.0-0
+- Use simp_options module for global catalysts
+- Use strongly typed parameters
+- Rename defined type ssh::client::add_entry to ssh::client::host_config_entry
+
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich@onyxpoint.com> - 5.0.0-0
+- Fix dependencies for simp 6 bump
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
+- Updated to compliance_markup version 2
+
+* Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 5.0.0-0
+- Updated iptables dependency version
+
+* Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+
+* Fri Sep 30 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.12-0
+- Fixed dependencies in `metadata.json` prior to a Forge push.
+
+* Wed Sep 28 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.11-0
+- Fix Forge `haveged` dependency name
+
+* Tue Sep 06 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.10-0
+- Modified AuthorizedKeysCommand to be /usr/bin/sss_ssh_authorizedkeys
+  if sssd is enabled.
+
+* Thu Aug 04 2016 Nick Miller <nick.miller@onyxpoint.com> - 4.1.9-0
+- Updated rpm requires to properly expire old versions
+
+* Mon Jul 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.8-0
+- Migration to semantic versioning and fix of the build system
+
+* Tue Jul 05 2016 Nick Miller <nick.miller@onyxpoint.com> - 4.1.7-0
+- The defaults for use_iptables and use_ldap will now follow the global
+  catalysts. Updated acceptance tests.
+
+* Thu Jun 30 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.6-0
+- Use_haveged is now a global catalyst.
+
+* Wed Jun 22 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.5-0
+- Pupmod-haveged now included by default to assist with entropy generation.
+
+* Tue Jun 07 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.4-0
+- The openssh_version fact is now compatible with ruby 1.8.7.
+
+* Sat May 21 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.4-0
+- Ensure that we set the proper SELinux port connection options for sshd if
+  using a non-standard port.
+
+* Wed Apr 20 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.3-0
+- Created an openssh_version fact.
+- Modified kex algorithm set:
+  - No longer set kex prior to openssh v 5.7
+  - Curve25519 kex only set in openssh v 6.5+
+
+* Tue Mar 22 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.2-0
+- Openssh-ldap is no longer installed when use_sssd is true.
+
+* Sat Mar 19 2016 Trevor Vaughan <tvaughan@onyxpoint.comm> - 4.1.1-0
+- Migrated use_simp_pki to a global catalyst.
+
+* Mon Mar 14 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-15
+- Ensure that EL6.7+ uses SSSD over NSCD
+
+* Thu Feb 25 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-14
+- Added compliance function support
+
+* Mon Jan 18 2016 Carl Caum <carl@puppetlabs.com> - 4.1.0-13
+- Removed empty logic block that was causing compilation errors in Puppet 4.
+
+* Wed Dec 09 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-12
+- CCE-3660-8 compliance.  Do not allow empty ssh passwords.
+
+* Fri Dec 04 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.0-12
+- Replaced all 'lsb*' facts with their (package-independent)
+  'operatingsystem*' counterparts.
+- Moved parameter validation to the top of each class.
+
+* Fri Nov 20 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-11
+- Updated the code to work around a bug in the OpenSSH client where FIPS mode
+  fails if the 'Cipher' parameter is present in /etc/ssh/ssh_config
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-11
+- migration to simplib and simpcat (lib/ only)
+
+* Fri Sep 18 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-10
+- Updated the ssh client ciphers to match the ssh server ciphers.
+
+* Wed Jul 29 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-9
+- Incorporated the updated SSH Augeas Lenses
+- Created a sub-rpm for the lenses to account for the modified license terms
+- Added support for default KexAlgorithms
+- Added sensible defaults for the SSH server in both FIPS and non-FIPS mode
+- Note: I have not yet tested these in FIPS enforcing mode so adjustments may
+        need to be made
+
+* Fri Feb 20 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-8
+- Added support for the new augeasproviders_ssh module
+- Migrated to the new 'simp' environment.
+
+* Fri Feb 06 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-7
+- Made all of the custom functions environment aware
+- Enhanced the ssh_keygen function to return private keys if so instructed
+  since we can use that to eradicate some automatically generated cruft in the
+  module spaces.
+- Changed puppet-server requirement to puppet
+
+* Fri Dec 19 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-6
+- Added a function, ssh_format_host_entry_for_sorting, that is explicitly for
+  use by the concat_fragment part of ssh::client::add_entry. It handles proper
+  sorting order when wildcards and question marks are used.
+
+* Sun Jun 22 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-5
+- Removed all non FIPS compliant ciphers from ssh server and client configs.
+
+* Thu Jun 19 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-5
+- Added support for the 'AuthorizedKeysCommandUser' in sshd_config
+  since this is now required in RHEL >= 7.
+
+* Thu Jun 05 2014 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-4
+- Set compression off in sshd_config by default.
+
+* Thu May 22 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-3
+- Fixed a resource chaining issue with /etc/ssh/ldap.conf. The source
+  had not been declared properly so the dependency chain was not being
+  enforced.
+
+* Fri Apr 11 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-2
+- Refactored manifests and removed singleton defines for puppet 3 and
+  hiera compatibility.
+- Added spec tests.
+- Added function sshd_config_bool_translate to translate booleans into yes/no variables.
+
+* Sun Apr 06 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-2
+- Added hooks for various top-level variables for increased configuration
+  flexibility.
+
+* Tue Jan 28 2014 Kendall Moore <kmoore@keywcorp.com> 4.1.0-1
+- Update to remove warnings about IPTables not being detected. This is a
+  nuisance when allowing other applications to manage iptables legitimately.
+- Removed the management of most variables by default from ssh::server::conf.
+  The remainder are now managed by an sshd augeas provider.
+- ALL supported variables are now settable via extdata as
+  ssh::server::conf::<varname>
+- This means that you can easily manipulate any variable as well as setting
+  those that are not natively managed using the augeas provider.
+- This work was done for supporting OpenShift
+
+* Thu Jan 02 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
+- AVC errors were being generated due to the /etc/ssh/ldap.conf file
+  being a symlink. This is now copied directly from /etc/pam_ldap.conf
+  instead of linked.
+
+* Mon Oct 07 2013 Kendall Moore <kmoore@keywcorp.com> - 4.0.0-2
+- Updated all erb templates to properly scope variables.
+
+* Wed Sep 25 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-1
+- Added the ability to modify the hosts that can connect to sshd via
+  IPTables using a client_nets variable.
+
+* Thu May 02 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Changed all localtime symlinks to file copies since SELinux does not like
+  symlinks in these cases.
+
+* Tue Apr 16 2013 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-9
+- All ssh public key authentication now directly uses LDAP.
+- Added ldap.conf to /etc/ssh.
+- Added openssh-ldap rpm and authorizedkeyscommand wrapper to template.
+- SSH fully manages /etc/ssh/local_keys.
+
+* Mon Dec 10 2012 Maintenance
+2.0.0-8
+- Created a Cucumber test to ensure that the SSH daemon is running.
+- Created a Cucumber test which creates a temporary user, and ensures
+  that they can SSH into the puppet server.
+
+* Thu Nov 08 2012 Maintenance
+2.0.0-7
+- The ssh_global_known_hosts function now automatically deletes any short name
+  key files that conflict with a long name file prior to manipulating the
+  catalog.
+
+* Fri Jul 20 2012 Maintenance
+2.0.0-6
+- Added a custom type 'sshkey_prune' that, given a target file, prunes all ssh
+  keys that Puppet doesn't know about.
+- Updated the ssh_global_known_hosts function to expire old keys after 7 days
+  by default. Users may specify their own number of expire days or set to 0 to
+  never expire any keys.
+
+* Wed Apr 11 2012 Maintenance
+2.0.0-5
+- Fixed bug with ssh_global_known_hosts such that it uses
+  'host_aliases' instead of 'alias' since the latter has be
+  deprecated.
+- Moved mit-tests to /usr/share/simp...
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Mar 02 2012 Maintenance
+2.0.0-4
+- Added the CBC ciphers back to the SSH server default config since
+  their absence was causing issues with various scripting languages.
+- Reformatted against the Puppet Labs style guide.
+- Improved test stubs.
+
+* Mon Dec 26 2011 Maintenance
+2.0.0-3
+- Updated the spec file to not require a separate file list.
+
+* Tue May 31 2011 Maintenance - 2.0.0-2
+- Set PrintLastLog to 'no' by default since this is now handled by PAM.
+- Removed CBC ciphers from the client and server.
+- No longer enable X11 forwarding on SSH servers by default.
+- Reduce the acceptable SSH cipher set to AES without CBC.
+
+* Fri Feb 11 2011 Maintenance - 2.0.0-1
+- Changed all instances of defined(Class['foo']) to defined('foo') per the
+  directions from the Puppet mailing list.
+- Updated to use concat_build and concat_fragment types.
+
+* Tue Jan 11 2011 Maintenance
+2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Maintenance - 1-2
+- Converting all spec files to check for directories prior to copy.
+
+* Wed Jun 30 2010 Maintenance
+1.0-1
+- /etc/ssh/ssh_known_hosts is now collected from all puppet managed hosts
+  without using stored configs.
+
+* Tue May 25 2010 Maintenance
+1.0-0
+- Code refactoring.

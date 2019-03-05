@@ -1,0 +1,24 @@
+---
+fixtures:
+  repositories:
+    augeasproviders_core: https://github.com/simp/augeasproviders_core
+    augeasproviders_grub: https://github.com/simp/augeasproviders_grub
+    concat:
+      # master is beyond 4.1.1, but has breaking changes to
+      # how fragments are ordered (MODULES-6625)
+      repo: https://github.com/simp/puppetlabs-concat
+      ref: 4.1.1
+    incron: https://github.com/simp/pupmod-simp-incron
+    iptables: https://github.com/simp/pupmod-simp-iptables
+    logrotate: https://github.com/simp/pupmod-simp-logrotate
+    pki: https://github.com/simp/pupmod-simp-pki
+    rsyslog: https://github.com/simp/pupmod-simp-rsyslog
+    simp_options: https://github.com/simp/pupmod-simp-simp_options
+    simplib: https://github.com/simp/pupmod-simp-simplib
+    stdlib: https://github.com/simp/puppetlabs-stdlib
+    systemd:
+      repo: https://github.com/simp/puppet-systemd
+      branch: simp-master
+    tcpwrappers: https://github.com/simp/pupmod-simp-tcpwrappers
+  symlinks:
+    simp_openldap: "#{source_dir}"

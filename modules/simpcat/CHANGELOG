@@ -1,0 +1,82 @@
+* Sun Mar 25 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.2-0
+- Add support for OEL and Puppet 5
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+- Confine puppet version in metadata.json
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 6.0.0-0
+- Minor cleanup
+
+* Mon Nov 14 2016 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
+- Changed from using Puppet[:vardir] to Facter.value(:puppet_vardir), which
+  accounts for the different vardirs on agent and server.
+
+* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Fully deconflict with puppetlabs-concat by renaming all types and providers
+  to 'simpcat'
+
+* Thu May 26 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.1-0
+- Update to use the $puppet_vardir fact
+
+* Sat Nov 07 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
+- Renamed pupmod-concat to pupmod-simpcat
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-3
+- Changed puppet-server requirement to puppet
+
+* Thu Aug 07 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-2
+- Updated the concat_output and fragmentdir functions to properly
+  handle String/Array conversions in Ruby 2.
+
+* Fri Jun 20 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-1
+- Updated to work with Ruby 2
+
+* Tue Jan 28 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Updated several aspects of concat_build to work properly with Puppet
+  3.4
+
+* Thu Jan 16 2014 Kendall Moore <kmoore@keywcorp.com> - 2.1.1-3
+- Updated provided for concat_build so that empty concat fragments wouldn't error out when
+  quiet is set to true.
+
+* Mon Jan 28 2013 Maintenance
+2.1.1-2
+- Create a test to check concat_build, concat_fragment, concat_output, and fragmentdir using postfix and snmpd modules.
+
+* Mon Sep 10 2012 Maintenance
+2.1.1-1
+- Fixed a bug where concat_build would explode if a file to be read had no
+  content.
+- Added an option 'externally_managed' to indicate that the fragment in
+  question was to be externally managed. This was mainly done to support Augeas
+  building parts of files.
+
+* Thu Jun 07 2012 Maintenance
+2.1.1-0
+- Ensure that Arrays in templates are flattened.
+- Call facts as instance variables.
+- Cleaned up a few items that cut down the run time. Most notably added a break
+  in the file comparison segment.
+- Moved mit-tests to /usr/share/simp...
+- Updated the methods to return the proper property values.
+
+* Fri Mar 02 2012 Maintenance
+2.1.0-3
+- Improved test stubs.
+
+* Fri Feb 10 2012 Maintenance
+2.1.0-2
+- The concat module was not properly picking up changes from
+  submodules.
+- Added checking to be sure that an appropriate target is set if using
+  parent builds.
+
+* Mon Dec 26 2011 Maintenance
+2.1.0-1
+- Updated the spec file to not require a separate file list.
+
+* Thu Nov 10 2011 Maintenance - 2.1.0-0
+- Massive rewrite for optimization.
+
+* Fri Feb 11 2011 Maintenance - 2.0.0-0
+- Initial implementation of concat_build and concat_fragment custom types.

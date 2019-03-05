@@ -1,0 +1,87 @@
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.0-0
+- Update Hiera 4 to Hiera 5
+
+* Mon Jul 09 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.3.0-0
+- Adds a `selinux_login` custom type that provides for the management of login
+  to user role mappings.
+- Incorporated the fork of the `voxpupuli-selinux` module as `simp-vox_selinux`
+  without conflict
+- Add support for OEL and Puppet 5
+- Fix bug with enforcement switching in the native type
+
+* Mon Apr 23 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 2.2.0-0
+- simp_options::selinux was supposed to indicate if the selinux module should
+  be included. Class include lists set in the simp module would include selinux
+  regardless of this setting.  This option was also being used to set the state
+  of selinux.  This caused confusion so  simp_options::selinux setting was
+  removed.  The selinux state, set by the ensure parameter, is defaulted to
+  'enforcing'.  This will result in the same behavior as if simp_options::selinux
+  was set to true.  See the pupmod-simp-simp module to see which scenarios
+  include selinux by default.
+
+* Thu Dec 07 2017 Steven Pritchard <steven.pritchard@onyxpoint.com> - 2.1.2-0
+- Update README.md from puppet strings
+
+* Fri Sep 15 2017 Nick Miller <nick.miller@gmail.com> - 2.1.1-0
+- Add message to reboot notify
+
+* Wed Jul 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 2.1.0-0
+- Rework manifests to ensure mcstrans and restorecond services are not
+  running when selinux is disabled.
+- Allow this module to manage restorecond package installation.
+
+* Wed Apr 26 2017 Nick Miller <nick.miller@onyxpoint.com> - 2.1.0-0
+- Moved management of mcstrans and restorecond to the selinux module
+- Change default packages ensure to use the catalyst
+- Update puppet requirement in metadata.json
+
+* Mon Apr 17 2017 Nick Markowski <nmarkowski@keywcorp.com> - 2.1.0-0
+- Fixed a bug wherein setenforce would run if selinux was disabled
+- Changes in selinux state incur a reboot notification
+
+* Tue Mar 28 2017 Nick Miller <nick.miller@onyxpoint.com> 2.0.2-0
+- Defaulted selinux::ensure to the selinux catalyst for better control
+  of selinux enforcement.
+
+* Tue Dec 20 2016 Nick Miller <nick.miller@onyxpoint.com> 2.0.1-0
+- Strongly typed module
+
+* Mon Nov 21 2016 SIMP-Team <https://groups.google.com/forum/#!forum/simp> 2.0.0-0
+- Updated module for compliance markup API v1.0.0 compatibility.
+
+* Wed Aug 31 2016 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 1.0.3-0
+- Ensure that policycoreutils-python is only installed if not installed
+  elsewhere. This deconflicts with various hotfixes that were needed in other
+  modules.
+
+* Tue Jun 21 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.2-0
+- policycoreutils-python now installed by default.
+
+* Tue Apr 12 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.0.1-0
+- Removed custom type deprecation warning
+
+* Thu Feb 25 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.0.0-5
+- Added compliance function support
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-4
+- Changed puppet-server requirement to puppet
+
+* Sun May 04 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-3
+- Rewrite the native type to properly handle all options.
+- Remove incorrect use of !! in the selinux provider.
+
+* Wed Apr 16 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-2
+- Update to allow true/false as enable modes so that it can be removed from the
+  sec module.
+
+* Wed Apr 09 2014 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-2
+- Added a custom type to set the selinux mode.  It autorequires all
+  selboolean types.  This replaces the selinux_enable execs in the init manifest.
+
+* Mon Oct 07 2013 Kendall Moore <kmoore@keywcorp.com> 1.0.0-1
+- Updated all erb templates to properly scope variables.
+
+* Fri May 03 2013 Trevor Vaughan <tvaughan@onyxpoint.com> 1.0.0-0
+- First cut at an SELinux module.
+- The only current functionality is to enable or disable SELinux on the running
+  system in a sane manner.

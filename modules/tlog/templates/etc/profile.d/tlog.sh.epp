@@ -1,0 +1,68 @@
+<%- |
+  Stdlib::Absolutepath $users_file = '/etc/security/tlog.users',
+  Stdlib::Absolutepath $app_path   = '/usr/bin/tlog-rec-session'
+| -%>
+# Place this script in /etc/profile.d to automatically hook any login or
+# interactive shell into tlog for a user or group listed in
+# /etc/security/tlog.users
+#
+# Entries in tlog.users should be listed one per line where users are bare
+# words such as `root` and groups are prefixed with a percent sign such as
+# `%root`.
+#
+# Copyright 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - Onyx Point, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+TLOG_USERS="<%= $users_file %>"
+TLOG_CMD="<%= $app_path %>"
+
+TLOG_UID=`id -u`
+
+if [ "${TLOG_RUNNING}" == "0" ]; then
+  export TLOG_RUNNING=0
+else
+  export TLOG_RUNNING=1
+fi
+
+# We must have an active TTY until https://github.com/Scribery/tlog/issues/227
+# is resolved
+if [ -t 1 ] && [ ! "${TLOG_RUNNING}" == "0" ]; then
+  if [ -f "${TLOG_USERS}" ]; then
+    if [ `getent passwd ${TLOG_UID} | cut -d':' -f7` != "/usr/bin/tlog-rec-session" ]; then
+      TLOG_UNAME=`id -nu`
+
+      # Formatted for the grep below
+      TLOG_GROUPS=`id -nG | sed 's/ /|%/g'`
+
+      if grep -qE "^(%${TLOG_GROUPS}|${TLOG_UNAME})$" "${TLOG_USERS}"; then
+        export TLOG_RUNNING=0
+
+        if [[ $- == *i* ]] || shopt -q login_shell; then
+          TLOG_CMD="${TLOG_CMD} -l"
+        fi
+
+        if ! ps --no-headers -o args $$ | grep -qe "-c[[:space:]]\+.\+"; then
+          TLOG_REC_SESSION_SHELL=$SHELL
+
+          # NOTE: Currently there is a bug that affects this that means that
+          # multiple tlog sessions spawned under the same parent process (think
+          # gnome-terminal or tmux/screen windows) will no longer log commands.
+          #
+          # https://github.com/Scribery/tlog/issues/228
+          exec $TLOG_CMD
+        fi
+      fi
+    fi
+  fi
+fi

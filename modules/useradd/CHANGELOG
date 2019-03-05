@@ -1,0 +1,48 @@
+* Fri Aug 24 2018 Nick Miller <nick.miller@onyxpoint.com> - 0.2.2
+- Add support for Puppet 5 and OEL
+- Update badges in README.md
+
+* Wed Dec 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.2.1
+- Set the minimum and maximum UID and GID allowed onto the system to the
+  default defined in /etc/login.defs or a sensible default if not otherwise
+  specified
+
+* Wed Jun 14 2017 Brandon Riden <brandon.riden@onyxpoint.com> - 0.2.0
+- Allow users to specify colors as strings instead of ansi codes in sysconfig/init
+- Updated sysconfig_init.pp to reflect these changes as well as add notes
+- Updated template to convert color strings to ansi code
+
+* Wed Jun 14 2017 Brandon Riden <brandon.riden@onyxpoint.com> - 0.2.0
+- Fix bug in libuser.conf where userBranch was referencing groupbranch variable
+- Added/fixed author on all manifests
+- Created Acceptance test
+- Updated spec/spec_helper_acceptance.rb
+- Added Managed by Puppet comment to all file templates
+- updated default nodeset
+- Added notes to login_defs.pp regarding min and max passwd length
+- Cleaned up documentation and made style changes
+
+* Mon Jun 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.2.0
+- Populate /etc/securetty with tty0-tty4, by default.
+
+* Wed Apr 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.1.1
+- Fixed useradd::libuser::defaults_crypt_style to only be a String of the
+  allowed values
+- Ensure that the 'modules' field is not printed if the passed Array is empty
+- Ensure that defaults_hash_rounds_min is less than defaults_hash_rounds_max
+  and that both are within an allowed range
+- Update useradd::login_defs::pass_min_len to 15 to match the rest of the module updates
+
+* Sat Mar 25 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.1.0
+- Provided the ability to simply add shells to /etc/shells
+- Removed all entries from /etc/securetty by default to match the latest
+  standard best practices. This removed ZSH.
+
+* Tue Feb 7 2017 Nick Miller <nick.miller@onyxpoint.com> - 0.0.1
+- Add useradd::passwd to manage passwd and related files
+- Manages /etc/securetty and /etc/shells
+
+* Mon Dec 5 2016 Nick Miller <nick.miller@onyxpoint.com> - 0.0.1
+- Initial release of module
+- This module is a collection of conf files regarding users and user creation.
+  - Most of the content used to be in simplib

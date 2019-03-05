@@ -1,0 +1,102 @@
+# The testing matrix considers ruby/puppet versions supported by SIMP and PE:
+# ------------------------------------------------------------------------------
+#  release    pup   ruby      eol
+# PE 2017.2   4.10  2.1.9  TBD
+# PE 2017.3   5.3   2.4.1  2018-07
+# PE 2018.1   ???   ?????  ????-??  (LTS)
+---
+language: ruby
+cache: bundler
+sudo: false
+
+bundler_args: --without development system_tests --path .vendor
+
+
+notifications:
+  email: false
+
+addons:
+  apt:
+    packages:
+      - rpm
+
+before_install:
+  - rm -f Gemfile.lock
+
+jobs:
+  include:
+    - stage: check
+      rvm: 2.4.1
+      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5"
+      script:
+        - bundle exec rake check:dot_underscore
+        - bundle exec rake check:test_file
+        - bundle exec rake lint
+        - bundle exec rake metadata_lint
+        - bundle exec rake pkg:check_version
+        - bundle exec rake pkg:compare_latest_tag
+        - bundle exec rake pkg:create_tag_changelog
+        - ruby -r json -e 'Dir.glob("data/**/*.json").map{|j| puts "Attempting to load "+j;JSON.load(File.new(j))}'
+        - ruby -r yaml -e 'Dir.glob("data/**/*.y{,a}ml").map{|y| puts "Attempting to load "+y;YAML.load(File.new(y))}'
+        - bundle exec puppet module build
+
+    - stage: spec
+      rvm: 2.4.1
+      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5.0"
+      script:
+        - bundle exec rake spec
+
+    - stage: spec
+      rvm: 2.1.9
+      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.10.0"
+      script:
+        - bundle exec rake spec
+
+    - stage: acceptance
+      sudo: required
+      rvm: 2.1.9
+      bundler_args: --without development --path .vendor
+      services:
+        - docker
+      script:
+        - bundle exec rake spec_clean
+        - bundle exec rake beaker:suites[default,docker_centos]
+      # PUPPET_VERSION can't handle a '~' here due to code in the test
+      env: PUPPET_VERSION="4.10.4"
+
+    - stage: acceptance
+      sudo: required
+      rvm: 2.4.1
+      bundler_args: --without development --path .vendor
+      services:
+        - docker
+      script:
+        - bundle exec rake spec_clean
+        - bundle exec rake beaker:suites[default,docker_centos]
+      # PUPPET_VERSION can't handle a '~' here due to code in the test
+      env: PUPPET_VERSION="5.5.3" BEAKER_PUPPET_COLLECTION="puppet5"
+
+    # This needs to be last since we have an acceptance test
+    - stage: deploy
+      rvm: 2.4.1
+      script:
+        - true
+      before_deploy:
+        - "export PUPMOD_METADATA_VERSION=`ruby -r json -e \"puts JSON.parse(File.read('metadata.json')).fetch('version')\"`"
+        - '[[ $TRAVIS_TAG =~ ^simp-${PUPMOD_METADATA_VERSION}$|^${PUPMOD_METADATA_VERSION}$ ]]'
+      deploy:
+        - provider: releases
+          api_key:
+              secure: "c/QadLPTz3GBOL8ZPjHlxVMcicavnVVwnaFORMFf1qQYI3zCADLoqSGPaSOWSLXOFgOOKLuz2PTofqtKy/muDK0t8gl8dEFnyrUGRyRMfzvmH88DUihJ5H7Tuj1aqtUEYUgMUvA3552rf93/zyGPmsi2HKx65mg0pM1ubdz3TuDbPmxD3KdWu5DZRpF+WgLwB9yaAi1q44bXfS1QP8G5YcXzmSxXccEg1H+wwR96CnvgxQ/mL6S6H3w3bQOFciprw99J2eXXZXrbTsjlp9Sm3kb3p32mdThZYyTxTmtqVRpyqf/YEM9a9XYFNfAVl4VltiTCjTtTaQqn+4dS7UWuEi4BjEMr6erB2WLtnBISSoOXyhhgYynhtRG006a5xSc+R0iwcEqZbPQgG0rDEgkSXH7P9SxsUcwYvE5ceKphI3HDFf/9r0h0nOQ82hcbAE3hwshMbM+s+dGiv6xlaWo2v9Sr7SCUdGHkEYryggTh2cdtsgGnNPRIrQHTa1HQe303YjSR9MqqdFB2v5lAt8EfHl8iR+y2/do6udj5KsaHDMtxVKnwHXcSf1mNCVSaL4nffMt96h0QBLCGhNibTNjk6zOKoKTkf/+Xuv6WR9tmHHeAULsYzmyFiAoqGBBulBDeBZgsw/zSxkKeXSX9r+JP7p9abEjOd3EoruvvNGr2XS4="
+          skip_cleanup: true
+          on:
+            tags: true
+            condition: '($SKIP_FORGE_PUBLISH != true)'
+        - provider: puppetforge
+          user: simp
+          password:
+              secure: "vL1MNFrE7aazh/rEsSaHugCYYWXrJmsBuhMIP27CQ/EpBQ6wfWZhukZdkikZrmkIiJHHLi1HaQycKdW2AzcqN932iXOdjYtEA9eE/hO1VtGMYVobZFS4sh2Wtt8saVOg0tMPq45hjFHUe8FmgyrsjHBB+kl/fdfLVr+TiFCmWGXtZkjMlJxqPp+fyZZDrMoKoB7eSm3edOtqX7gONP3MEJ/wcHgCUTyspxI8sSXGl8IPwWNxU4LSgCwbvr/JzmDmKiK2AbSc7Q2+g7NrvZV39CbcV0IH4Uy4A+3fBBli/nPaidm/dvIvcYDacWF0UiXZTMvqd8tL4Z3Sf4vvB6NZ328ml97w233fLSHdLGn8qaIjmkK5x1UN9BRmA/WZbmkSSLWqwr6Cz+c4unik1NeQF2shpNZw8cGyh6IFnpIUbBsXPgxiIbb1HfoQCRFocTgkqpsbH7n8WpJkEdPpVgtJh51xILlbZibsI9U1YsfDjpZWXxUUObsANbAK0Z0Ep0wkzv31+9fSD7FlGOJ//GjqFRjW4inekCeUNyRbXTGIlDMeZyRKs/JZVndKr9AFestwkiM7AWWNFUKfSX5RE0oRNwQDAKAa8HDPtErNhfoAtBCYEcBTB6GoXhnyX/1gwrDb8zeEtbc50PLBnJT6gJIp2M2IiAeXHgGuMLiDbNzgThQ="
+          on:
+            tags: true
+            rvm: 2.4.1
+            condition: '($SKIP_FORGE_PUBLISH != true)'

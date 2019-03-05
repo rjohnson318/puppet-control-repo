@@ -1,0 +1,32 @@
+#!/usr/bin/expect -f
+
+set force_conservative 1  ;# set to 1 to force conservative mode even if
+                          ;# script wasn't run conservatively originally
+if {$force_conservative} {
+        set send_slow {1 .1}
+        proc send {ignore arg} {
+                sleep .1
+                exp_send -s -- $arg
+        }
+}
+
+set user [lindex $argv 0]
+set host [lindex $argv 1]
+set pass [lindex $argv 2]
+set newpass [lindex $argv 3]
+set timeout 5
+
+set timeout -1
+spawn ssh -o StrictHostKeyChecking=no -o NumberOfPasswordPrompts=1 $host -l $user
+match_max 100000
+expect -exact "$user@$host's password: "
+send -- "$pass\r"
+expect -re "UNIX password: "
+send -- "$pass\r"
+expect -exact "\r
+New password: "
+send -- "$newpass\r"
+expect -exact "\r
+Retype new password: "
+send -- "$newpass\r"
+expect eof

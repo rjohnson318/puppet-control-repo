@@ -1,0 +1,11 @@
+<%
+  output = []
+  output << '[' + @section_name + ']'
+  output << 'Identity=' + Array(@identity).join(';')
+  output << 'Action=' + @action
+  output << ('ResultActive=' + @result_active) if @result_active
+  output << ('ResultInactive=' + @result_inactive) if @result_inactive
+  output << ('ResultAny=' + @result_any) if @result_any
+  output << ('ReturnValue=' + @return_value) if @return_value
+-%>
+<%= output.join("\n") %>

@@ -1,0 +1,46 @@
+* Sat Mar 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.1.1-0
+- Add support for OEL and Puppet 5
+- Update badges and contribution guide URL in README.md
+
+* Wed Jun 21 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.1.0-0
+- Update custom Puppet 3 functions to namespaced, Puppet 4 functions
+- Allow default identity and identities prefixed with unix-netgroup.
+- Confine puppet version in metadata.json
+
+* Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.1.0-0
+- Add EL7 and polkit 106+ support by allowing javascript rules
+  - Added define to allow for easy placement of custom rules
+  - Added templated define to ease generation of basic rules
+
+* Mon Dec 19 2016 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.0.0-0
+- Strong Typing
+- Code cleanup
+
+* Tue Nov 22 2016 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.0.0-0
+- Major version bump for SIMP 6
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.2-0
+- Remove compliance_map and general housekeeping
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-2
+- migration to simplib and simpcat (lib/ only)
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-1
+- Changed puppet-server requirement to puppet
+
+* Tue Apr 08 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-0
+- Refactored manifests to pass all lint tests for puppet 3 and hiera compatibility.
+- Added spec tests.
+
+* Mon Oct 07 2013 Kendall Moore <kmoore@keywcorp.com> - 4.0.0-3
+- Updated all erb templates to properly scope variables.
+
+* Thu Jul 04 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-2
+- There was a bug in the 'identity' variable for polkit::local_authority where
+  it would not properly accept arrays of users or groups.
+
+* Mon Dec 31 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-1
+- Created a Cucumber test that includes module in manifest and checks for config files.
+
+* Fri Oct 26 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Initial module release

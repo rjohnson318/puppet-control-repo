@@ -1,0 +1,43 @@
+* Wed Nov 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 1.2.1-0
+- Update badges and contribution guide URL in README.md
+
+* Fri Aug 24 2018 Nick Miller <nick.miller@onyxpoint.com> - 1.2.1-0
+- Add Puppet 5 and OEL Support
+
+* Mon Apr 23 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 1.2.0-0
+- Removed simp_options::selinux.  Conflicts between this setting
+  and what was in the scenario class lists was causing unexpected results.
+
+* Wed Dec 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
+- Added simp_options::uid and simp_options::gid classes for ID limit
+  consistency across the entire infrastructure
+
+* Fri Nov 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.4-0
+- Fix parameter issues in simp_options::ldap
+- Fix PE support in simp_options::puppet
+
+* Sat Apr 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 1.0.3-0
+- Add simp_options::libkv
+- Update puppet requirement in metadata.json
+
+* Wed Apr 12 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 1.0.2-0
+- Add simp_options::package_ensure
+
+* Tue Feb 07 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 1.0.1-0
+- Removed simp_options::ldap::root_hash as this is not a global catalyst
+
+* Wed Feb 01 2017 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.1-0
+- Updated ldap *_dn defaults to use simplib::domain_to_dn()
+
+* Mon Jan 30 2017 Nick Miller <nick.miller@onyxpoint.com> - 1.0.1-0
+- Added more strict Puppet and PE requirements, pinning to Puppet 4.7+ and
+  PE 2016.4.0+
+- Updated openssl::cipher_suite to be set to the fips_ciphers fact if it's
+  available to expand the 'FIPS' shortcut, which causes issues with some
+  applications (openldap)
+
+* Fri Dec 30 2016 Dylan Cochran <dylan.cochran@onyxpoint.com> - 1.0.1-0
+- Add simp_options::puppet::server_distribution
+
+* Fri Dec 02 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 1.0.0-0
+- Initial version

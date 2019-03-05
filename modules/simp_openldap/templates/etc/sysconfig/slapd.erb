@@ -1,0 +1,13 @@
+<%
+    slapd_urls = []
+
+    slapd_urls << 'ldap:///' if @listen_ldap
+    slapd_urls << 'ldapi:///' if @listen_ldapi
+    slapd_urls << 'ldaps:///' if @listen_ldaps
+-%>
+<% unless slapd_urls.empty? -%>
+SLAPD_URLS="<%=slapd_urls.join(' ')%>"
+<% end -%>
+<% unless @custom_options.empty? -%>
+SLAPD_OPTIONS="<%= @custom_options.join(' ')%>"
+<% end -%>

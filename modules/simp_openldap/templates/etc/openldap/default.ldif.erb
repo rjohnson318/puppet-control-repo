@@ -1,0 +1,157 @@
+dn: <%= @_suffix %>
+dc: <%= @_suffix.split(',').first.split(/dc=/i).last %>
+objectClass: top
+objectClass: domain
+
+dn: ou=Hosts,<%= @_suffix %>
+ou: Hosts
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Rpc,<%= @_suffix %>
+ou: Rpc
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Services,<%= @_suffix %>
+ou: Services
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Mounts,<%= @_suffix %>
+ou: Mounts
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Networks,<%= @_suffix %>
+ou: Networks
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=People,<%= @_suffix %>
+ou: People
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Group,<%= @_suffix %>
+ou: Group
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Netgroup,<%= @_suffix %>
+ou: Netgroup
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Protocols,<%= @_suffix %>
+ou: Protocols
+objectClass: top
+objectClass: organizationalUnit
+
+dn: ou=Aliases,<%= @_suffix %>
+ou: Aliases
+objectClass: top
+objectClass: organizationalUnit
+
+dn: cn=localhost.localdomain,ou=Hosts,<%= @_suffix %>
+objectClass: top
+objectClass: ipHost
+objectClass: device
+ipHostNumber: 127.0.0.1
+cn: localhost.localdomain
+cn: localhost
+
+dn: <%= @_rootdn %>
+cn: <%= @_rootdn.split(',').first.split('=').last %>
+objectClass: organizationalRole
+
+dn: <%= @_syncdn %>
+objectClass: person
+cn: <%= @_syncdn.split(',').first.split('=').last %>
+sn: Internal
+userPassword: <%= @_syncpw %>
+pwdPolicySubentry: cn=noExpire_noLockout,ou=pwpolicies,<%= @_suffix %>
+
+dn: <%= @_binddn %>
+objectClass: person
+cn: <%= @_binddn.split(',').first.split('=').last %>
+sn: Internal
+userPassword: <%= @_bindpw %>
+pwdPolicySubentry: cn=noExpire_noLockout,ou=pwpolicies,<%= @_suffix %>
+
+dn: cn=users,ou=Group,<%= @_suffix %>
+objectClass: posixGroup
+objectClass: top
+cn: users
+gidNumber: <%= @users_group_id %>
+
+dn: cn=administrators,ou=Group,<%= @_suffix %>
+objectClass: posixGroup
+objectClass: top
+cn: administrators
+gidNumber: <%= @administrators_group_id %>
+
+dn: ou=pwpolicies,<%= @_suffix %>
+ou: pwpolicies
+objectClass: top
+objectClass: organizationalUnit
+
+# Some sane defaults
+dn: cn=default,ou=pwpolicies,<%= @_suffix %>
+objectClass: top
+objectClass: device
+objectClass: pwdPolicy
+objectClass: pwdPolicyChecker
+cn: default
+pwdAttribute: userPassword
+pwdMinAge: <%= @ppolicy_pwd_min_age %>
+pwdMaxAge: <%= @ppolicy_pwd_max_age %>
+pwdInHistory: <%= @ppolicy_pwd_in_history %>
+<%
+    if has_variable?('_simp_ppolicy_check_password') &&
+      @_simp_ppolicy_check_password &&
+      !"#{@_simp_ppolicy_check_password}".empty?
+-%>
+pwdCheckQuality: <%= @ppolicy_pwd_check_quality %>
+<% else -%>
+pwdCheckQuality: 0
+<% end -%>
+pwdMinLength: <%= @ppolicy_pwd_min_length %>
+pwdExpireWarning: <%= @ppolicy_pwd_expire_warning %>
+pwdGraceAuthNLimit: <%= @ppolicy_pwd_grace_authn_limit %>
+pwdLockout: <%= @ppolicy_pwd_lockout.to_s.upcase %>
+pwdLockoutDuration: <%= @ppolicy_pwd_lockout_duration %>
+pwdMaxFailure: <%= @ppolicy_pwd_max_failure %>
+pwdFailureCountInterval: <%= @ppolicy_pwd_failure_count_interval %>
+pwdMustChange: <%= @ppolicy_pwd_must_change.to_s.upcase %>
+pwdAllowUserChange: <%= @ppolicy_pwd_allow_user_change.to_s.upcase %>
+pwdSafeModify: <%= @ppolicy_pwd_safe_modify.to_s.upcase %>
+<% if @_simp_ppolicy_check_password -%>
+pwdCheckModule: <%= @_simp_ppolicy_check_password %>.so
+<% end -%>
+
+# This is for "special" accounts like hostAuth and LDAPSync
+dn: cn=noExpire_noLockout,ou=pwpolicies,<%= @_suffix %>
+objectClass: top
+objectClass: device
+objectClass: pwdPolicy
+cn: noExpire_noLockout
+pwdAttribute: userPassword
+objectClass: pwdPolicyChecker
+pwdMinAge: 0
+pwdMaxAge: 0
+pwdInHistory: 24
+pwdCheckQuality: 2
+pwdMinLength: 14
+pwdExpireWarning: 0
+pwdGraceAuthNLimit: -1
+pwdLockout: FALSE
+pwdLockoutDuration: 900
+pwdMaxFailure: 5
+pwdFailureCountInterval: 900
+pwdMustChange: FALSE
+pwdAllowUserChange: FALSE
+pwdSafeModify: FALSE
+<% if @_simp_ppolicy_check_password -%>
+pwdCheckModule: <%= @_simp_ppolicy_check_password %>.so
+<% end -%>

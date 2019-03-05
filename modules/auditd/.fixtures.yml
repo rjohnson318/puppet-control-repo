@@ -1,0 +1,23 @@
+---
+fixtures:
+  repositories:
+    compliance_markup: https://github.com/simp/pupmod-simp-compliance_markup
+    augeasproviders_core: https://github.com/simp/augeasproviders_core
+    augeasproviders_grub: https://github.com/simp/augeasproviders_grub
+    concat:
+      # master is beyond 4.1.1, but has breaking changes to
+      # how fragments are ordered (MODULES-6625)
+      repo: https://github.com/simp/puppetlabs-concat
+      ref: 4.1.1
+    logrotate: https://github.com/simp/pupmod-simp-logrotate
+    pki: https://github.com/simp/pupmod-simp-pki
+    rsyslog: https://github.com/simp/pupmod-simp-rsyslog
+    simplib: https://github.com/simp/pupmod-simp-simplib
+    stdlib: https://github.com/simp/puppetlabs-stdlib
+    systemd:
+      repo: https://github.com/simp/puppet-systemd
+      branch: simp-master
+    disa_stig-el7-baseline:
+      repo: https://github.com/simp/inspec-profile-disa_stig-el7
+      branch:  master
+      target: spec/fixtures/inspec_deps/inspec_profiles/profiles

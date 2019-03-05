@@ -1,0 +1,2 @@
+Requires: pupmod-herculesteam-augeasproviders_core >= 2.0.0
+Requires: pupmod-herculesteam-augeasproviders_core < 3.0.0

@@ -1,0 +1,104 @@
+<%
+  # Variable sanity checking
+
+  # This is used below, so don't mess around with it unless you know what it's
+  # doing!
+  t_process_types = {
+    'main_process' => '',
+    'pre_start' => 'pre-start ',
+    'post_start' => 'post-start ',
+    'pre_stop' => 'pre-stop ',
+    'post_stop' => 'post-stop '
+  }
+-%>
+# This file managed by Puppet
+# Changes will be overwritten on the next Puppet run.
+#
+
+<%
+  t_process_types.keys.each do |t_var_name|
+    if eval("@#{t_var_name}")
+
+      if eval("@#{t_var_name}_type") == 'exec'
+-%>
+<%= t_process_types[t_var_name] %>exec <%= eval("@#{t_var_name}") %>
+<%
+      else
+-%>
+<%= t_process_types[t_var_name] %>script
+<%= eval("@#{t_var_name}.split(\"\n\").map {|line| '  ' + line}.join(\"\n\")") %>
+end script
+
+<%    end -%>
+<%  end -%>
+<% end -%>
+start on <%= @start_on %>
+<% if @stop_on -%>
+stop on <%= @stop_on %>
+<% end -%>
+<% if @default_env -%>
+env <%= @default_env %>
+<% end -%>
+<% if @env_export -%>
+export <%= @env_export %>
+<% end -%>
+<% if @is_task  -%>
+task
+<% end -%>
+<% if @respawn  -%>
+respawn
+<% end -%>
+<% if @respawn_limit -%>
+respawn limit <%= Array(@respawn_limit).join(' ') %>
+<% end -%>
+<% if @normal_exit -%>
+normal exit <%= Array(@normal_exit).join(' ') %>
+<% end -%>
+<% if @instance_name -%>
+instance <%= @instance_name %>
+<% end -%>
+<% if @description -%>
+description "<%= @description %>"
+<% end -%>
+<% if @author -%>
+author "<%= @author %>"
+<% end -%>
+<% if @doc_version -%>
+version "<%= @doc_version %>"
+<% end -%>
+<% if @emits -%>
+emits <%= Array(@emits).join(' ') %>
+<% end -%>
+<% if @console -%>
+console <%= @console %>
+<% end -%>
+<% if @umask -%>
+umask <%= @umask %>
+<% end -%>
+<% if @nice -%>
+nice <%= @nice %>
+<% end -%>
+<% if @oom -%>
+oom <%= @oom %>
+<% end -%>
+<% if @chroot -%>
+chroot <%= @chroot %>
+<% end -%>
+<% if @chdir -%>
+chdir <%= @chdir %>
+<% end -%>
+<% if @sys_limit -%>
+limit <%= Array(@sys_limit).join(' ') %>
+<% end -%>
+<% if @kill_timeout -%>
+kill timeout <%= @kill_timeout %>
+<% end -%>
+<% if @expect_stop  -%>
+expect stop
+<% end -%>
+<% if @expect_daemon  -%>
+expect daemon
+<% end -%>
+<% if @expect_fork  -%>
+expect fork
+<% end -%>

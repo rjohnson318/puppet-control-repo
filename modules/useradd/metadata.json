@@ -1,0 +1,62 @@
+{
+  "name": "simp-useradd",
+  "version": "0.2.2",
+  "author": "SIMP Team",
+  "summary": "A SIMP puppet module for managing settings regarding users and user creation",
+  "license": "Apache-2.0",
+  "source": "https://github.com/simp/pupmod-simp-useradd",
+  "project_page": "https://github.com/simp/pupmod-simp-useradd",
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "useradd",
+    "default",
+    "libuser",
+    "profile",
+    "shadow",
+    "passwd",
+    "group",
+    "shells",
+    "securetty",
+    "tty"
+  ],
+  "dependencies": [
+    {
+      "name": "simp/simplib",
+      "version_requirement": ">= 3.9.0 < 4.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.0 < 5.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.7.0 < 6.0.0"
+    }
+  ]
+}

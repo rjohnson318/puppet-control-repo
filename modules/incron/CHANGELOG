@@ -1,0 +1,52 @@
+* Sun Jan 20 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.4.0-0
+- Add the ability to set the 'max_open_files' ulimit
+- Add Incron::Mask Data Type denoting valid incron masks
+- Add `incron::purge` parameter to optionally delete all unmanaged files in
+  `/etc/incron.d`. This may be enabled by default in the future but is
+  currently disabled to preserve the existing functionality.
+- Added support for the new options starting with 0.5.12
+  - Automatically strip out options that are not supported by earlier versions
+    for seamless backward compatibility
+
+* Thu Nov 01 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.3.1-0
+- Update static assets for puppet 5
+- Update badges in README.md
+
+* Thu Jul 05 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.3.1-0
+- Add support for OEL and Puppet 5
+
+* Tue Jun 19 2018 Nick Miller <nick.miller@onyxpoint.com> - 0.3.0-0
+- Stop managing the systemd unit file, because deviating from the RPM defaults
+  violates the STIG
+- Set /etc/incron.d to 0755, the RPM default
+
+* Fri May 04 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.3.0-0
+- Added a native type `incron_system_table` to allow for client side glob
+  expansion on paths
+- Pushed all validation of parameters off to the native type from
+  `incron::system_table`
+- Updated acceptance tests to verify that incron is actually working
+- Bumped the supported puppet version to '< 6'
+
+* Mon Apr 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.2.0-0
+- Fixed permission on incrond service file to clear errors in system log.
+- Updated package to use package ensure to control updates.  This changed the
+  default ensure of package to installed from latest.
+
+* Mon Feb 12 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 0.1.0-0
+- Update upperbound on puppetlabs/concat version to < 5.0.0
+
+* Mon Jan 08 2018 Rurik Yla-Onnenvuori <rurik.ylae-onnenvuori@baloise.com> - 0.1.0-0
+- Add support for defining system table entries in hiera
+- Remove dependency to simplib
+
+* Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.0.3-0
+- Update concat version in metadata.json
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.0.2-0
+- Update puppet dependency in metadata.json
+- Remove OBE pe dependency in metadata.json
+
+* Wed Dec 7 2016 Nick Miller <nick.miller@onxypoint.com> - 0.0.1
+- First cut
+- Content moved from simplib, added tests

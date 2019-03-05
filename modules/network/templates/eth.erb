@@ -1,0 +1,255 @@
+<% bool_to_yesno = { true => 'yes', false => 'no' } -%>
+<%
+  eth_opts = []
+
+  eth_opts << "BOOTPROTO=#{@bootproto}"
+
+  if !@delay.nil? then
+    eth_opts << "DELAY=#{@delay}"
+  end
+
+  eth_opts << "DEVICE=#{@name}"
+
+  if !@dhcp_hostname.nil? then
+    eth_opts << "DHCP_HOSTNAME=#{@dhcp_hostname}"
+  end
+  if !@gateway.nil? then
+    eth_opts << "GATEWAY=#{@gateway}"
+  end
+
+  if !@macaddr.nil? then
+    eth_opts << "MACADDR=#{@macaddr}"
+  elsif !@hwaddr.nil? then
+    eth_opts << "HWADDR=#{@hwaddr}"
+    eth_opts << "# Puppet not setting HWADDR due to 'hwaddr' having a value of '#{@hwaddr}'"
+  elsif !@auto_discover_mac then
+    # If your net type is not a non-physical interface, as per the list from the official documentation,
+    # then auto discover your MAC/Hardware address.
+    #
+    # Handle virtual interface MAC discovery.
+    lmacaddr = scope.lookupvar("::macaddress_#{@name.split(':')[0]}")
+
+    if lmacaddr.match(/^(00:?)+$/) then
+      raise Puppet::ParseError.new("Found MAC address of all 0's for #{@name}")
+    end
+
+    eth_opts << "HWADDR=#{lmacaddr}"
+  end
+
+  if !@ipaddr.nil? then
+    eth_opts << "IPADDR=#{@ipaddr}"
+  end
+  if !@ipv6addr.nil? then
+    eth_opts << "IPV6ADDR=#{@ipv6addr}"
+  end
+  if !@ipv6_autoconf.nil? then
+    eth_opts << "IPV6_AUTOCONF=#{bool_to_yesno[@ipv6_autoconf]}"
+  end
+  if !@ipv6_control_radvd.nil? then
+    eth_opts << "IPV6_CONTROL_RADVD=#{bool_to_yesno[@ipv6_control_radvd]}"
+  end
+  if !@ipv6init.nil? then
+    eth_opts << "IPV6INIT=#{bool_to_yesno[@ipv6init]}"
+  end
+  if !@ipv6_mtu.nil? then
+    eth_opts << "IPV6_MTU=#{@ipv6_mtu}"
+  end
+  if !@ipv6_privacy.nil? then
+    eth_opts << "IPV6_PRIVACY=#{@ipv6_privacy}"
+  end
+  if !@ipv6_radvd_pidfile.nil? then
+    eth_opts << "IPV6_RADVD_PIDFILE=#{@ipv6_radvd_pidfile}"
+  end
+  if !@ipv6_radvd_trigger_action.nil? then
+    eth_opts << "IPV6_RADVD_TRIGGER_ACTION=#{@ipv6_radvd_trigger_action}"
+  end
+  if !@ipv6_router.nil? then
+    eth_opts << "IPV6_ROUTER=#{bool_to_yesno[@ipv6_router]}"
+  end
+  if !@ipv6addr_secondaries.nil? then
+    eth_opts << "IPV6_SECONDARIES=#{@ipv6addr_secondaries.join(' ')}"
+  end
+  if !@ipv6to4init.nil? then
+    eth_opts << "IPV6TO4INIT=#{bool_to_yesno[@ipv6to4init]}"
+  end
+  if !@ipv6to4_ipv4addr.nil? then
+    eth_opts << "IPV6TO4_IPV4ADDR=#{@ipv6to4_ipv4addr}"
+  end
+  if !@ipv6to4_mtu.nil? then
+    eth_opts << "IPV6TO4_MTU=#{@ipv6to4_mtu}"
+  end
+  if !@ipv6to4_relay.nil? then
+    eth_opts << "IPV6TO4_RELAY=#{@ipv6to4_relay}"
+  end
+  if !@ipv6to4_routing.nil? then
+    eth_opts << "IPV6TO4_ROUTING=#{@ipv6to4_routing}"
+  end
+  if !@isalias.nil? then
+    eth_opts << "ISALIAS=#{bool_to_yesno[@isalias]}"
+  end
+  if !@master.nil? then
+    eth_opts << "MASTER=#{@master}"
+  end
+  if !@mtu.nil? then
+    eth_opts << "MTU=#{@mtu}"
+  end
+  if !@netmask.nil? then
+    eth_opts << "NETMASK=#{@netmask}"
+  end
+  if @name.include?(':') then
+    eth_opts << "ONPARENT=#{bool_to_yesno[@onboot]}"
+  else
+    eth_opts << "ONBOOT=#{bool_to_yesno[@onboot]}"
+  end
+  if !@peerdns.nil? then
+    eth_opts << "PEERDNS=#{bool_to_yesno[@peerdns]}"
+  end
+
+  if @vlan then
+    eth_opts << 'VLAN=yes'
+    if !@vlan_name_type.nil? then
+      eth_opts << "VLAN_NAME_TYPE=#{@vlan_name_type}"
+    end
+  end
+
+  if !@physdev.nil? then
+    eth_opts << "PHYSDEV=#{@physdev}"
+  end
+  if !@dns1.nil? then
+    eth_opts << "DNS1=#{@dns1}"
+  end
+  if !@dns2.nil? then
+    eth_opts << "DNS2=#{@dns2}"
+  end
+  if !@persistent_dhclient.nil? then
+    eth_opts << "PERSISTENT_DHCLIENT=#{bool_to_yesno[@persistent_dhclient]}"
+  end
+  if !@slave.nil? then
+    eth_opts << "SLAVE=#{bool_to_yesno[@slave]}"
+  end
+  if !@net_type.nil? then
+    eth_opts << "TYPE=#{@net_type}"
+  end
+  if !@userctl.nil? then
+    eth_opts << "USERCTL=#{bool_to_yesno[@userctl]}"
+  end
+  if !@metric.nil? then
+    eth_opts << "METRIC=#{@metric}"
+  end
+  if !@hotplug.nil? then
+    eth_opts << "HOTPLUG=#{bool_to_yesno[@hotplug]}"
+  end
+  if !@window.nil? then
+    eth_opts << "WINDOW=#{@window}"
+  end
+  if !@srcaddr.nil? then
+    eth_opts << "SRCADDR=#{@srcaddr}"
+  end
+  if !@nozeroconf.nil? then
+    eth_opts << "NOZEROCONF=#{@nozeroconf}"
+  end
+  if !@dhcprelease.nil? then
+    eth_opts << "DHCPRELEASE=#{@dhcprelease}"
+  end
+  if !@dhclient_ignore_gateway.nil? then
+    eth_opts << "DHCLIENT_IGNORE_GATEWAY=#{bool_to_yesno[@dhclient_ignore_gateway]}"
+  end
+
+  t_dhclientargs = []
+  if !@dhclient_request_option_list.nil? then
+    t_dhclientargs << "-R #{@dhclient_request_option_list.join(' ')}"
+  end
+
+  if !@dhclient_timeout.nil? then
+    if scope.function_versioncmp([@operatingsystemmajrelease,'6']) < 0 then
+      t_dhclientargs << "-T #{@dhclient_timeout}"
+    else
+      t_dhclientargs << "-timeout #{@dhclient_timeout}"
+    end
+  end
+
+  if !@dhclient_vendor_class_identifier.nil? then
+    t_dhclientargs << "-V #{@dhclient_vendor_class_identifier}"
+  end
+  if !t_dhclientargs.nil? then
+    eth_opts << "DHCLIENTARGS='#{t_dhclientargs.join(' ')}'"
+  end
+  if !@ethtool_opts.nil? then
+    eth_opts << "ETHTOOL_OPTS=#{@ethtool_opts.join(' ')}"
+  end
+
+  if !@reorder_hdr.nil? then
+    eth_opts << "REORDER_HDR=#{bool_to_yesno[@reorder_hdr]}"
+  end
+
+  if !@arp.nil? then
+    eth_opts << "ARP=#{bool_to_yesno[@arp]}"
+  end
+
+  if !@linkdelay.nil? then
+    eth_opts << "LINKDELAY=#{@linkdelay}"
+  end
+  if !@bridge.nil? then
+    eth_opts << "BRIDGE=#{@bridge}"
+  end
+
+  # Take care of bonding
+  require 'ipaddr'
+
+  t_bonding_options = []
+
+  if !@bond_arp_interval.nil? then
+    t_bonding_options << "arp_interval=#{@bond_arp_interval}"
+
+    if ( !@bond_arp_ip_target.nil? ) and ( @bond_arp_interval > 0 ) then
+      begin
+        IPAddr.new(@bond_arp_ip_target)
+      rescue
+        raise Puppet::ParseError.new("bond_arp_ip_target must be a valid IP address")
+      end
+      t_bonding_options << "arp_ip_target=#{@bond_arp_ip_target}"
+    end
+  end
+
+  if !@bond_lacp_rate.nil? then
+    t_bonding_options << "#lacp_rate=#{@bond_lacp_rate}"
+  end
+
+  if !@bond_max_bonds.nil? then
+    t_bonding_options << "max_bonds=#{@bond_max_bonds}"
+  end
+
+  if !@bond_miimon.nil? then
+      t_bonding_options << "miimon=#{@bond_miimon}"
+
+    # These two are only valid if miimon is being used.
+    if !@bond_downdelay.nil? then
+      t_bonding_options << "downdelay=#{@bond_downdelay}"
+    end
+
+    if !@bond_updelay.nil? then
+      t_bonding_options << "updelay=#{@bond_updelay}"
+    end
+  end
+
+  if !@bond_mode.nil? then
+      t_bonding_options << "mode=#{@bond_mode}"
+
+    if !@bond_primary.nil? and ( @bond_mode.eql?("active-backup") or @bond_mode.eql?("1") ) then
+      t_bonding_options << "primary=#{@bond_primary}"
+    end
+  end
+
+  if !@bond_use_carrier.nil? then
+    t_bonding_options << "bond_use_carrier=#{@bond_use_carrier}"
+  end
+
+  if !@bond_xmit_hash_policy.nil? then
+    t_bonding_options << "xmit_hash_policy=#{@bond_xmit_hash_policy}"
+  end
+
+  if !t_bonding_options.empty? then
+    eth_opts << "BONDING_OPTS='#{t_bonding_options.join(' ')}'"
+  end
+-%>
+<%= eth_opts.join("\n") %>

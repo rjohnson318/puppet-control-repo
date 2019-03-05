@@ -1,0 +1,164 @@
+* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.4-0
+- Drop Hiera 4 support
+- Update badges and contribution guide URL in README.md
+
+* Wed Jul 18 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.4-0
+- Add support for OEL and Puppet 5
+
+* Mon Apr 16 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.0.3-0
+- pki::copy's source parameter now accepts any string to allow for use of NSS
+  and remote file sources.
+- Cleanup unneeded fixtures
+- Update version range of auditd dependency in metadata.json
+
+* Mon Dec 11 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.2-0
+- Ensure that /etc/pki/simp_apps is recursively purged so that old certificates
+  are not left on the system
+- Adds a new param, `$certname`, that controls the name of the certs in keydist
+  that will be copied over. This used to be set to `$facts['fqdn']` without an
+  option to change it, now it will default to `$trusted['certname']`
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 6.0.1-0
+- Update puppet dependency and remove OBE pe dependency in metadata.json
+
+* Wed Jan 11 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- SIMP certs are now managed in /etc/pki/simp/x509, and application
+  certs in /etc/pki/simp_apps/<app_name>/x509.
+
+* Tue Jan 10 2017 Nick Miller <nick.miller@onyxpoint.com> - 6.0.0-0
+- Changed default location of keydist certs from the files directory of the pki
+  module unless $pki is set to 'simp', when it will pull from pki_files in a
+  different module path instead.
+
+* Mon Jan 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.0.0-0
+- Set perms on simp_apps to 644/755; apps were being denied access to
+  their own certs because they could not access /etc/pki/simp_apps.
+- We have made the decision to centralize application certificates
+  when simp is managing pki (simp_options::pki => true or 'simp').
+  This update re-tools pki::copy to better handle managing certs
+  in /etc/pki/simp_apps.
+
+* Mon Dec 26 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Changed pki::pki_dir parameter to pki::base_dir
+- Updated acceptance tests
+- Fixed bugs in ordering
+
+* Tue Dec 13 2016 Jeanne Greulich <jgreulich.greulich@onyxpoint.com> - 6.0.0-0
+- Global catalyst updates
+- Strong Type updates
+- Changed default for pki directory to /etc/pki/simp from /etc/pki
+
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich.greulich@onyxpoint.com> - 5.0.0-0
+- update requirement versions
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
+- Updated to compliance_markup version 2
+
+* Fri Sep 30 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.4-0
+- Fixed dependencies in `metadata.json` prior to a Forge push.
+
+* Wed Jul 06 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.3-0
+- Fixed a permissions flapping issue between a file resource and the 'sync'
+  provider.
+
+* Tue Apr 12 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 4.2.2-0
+- Removed custom type deprecation warning
+
+* Mon Mar 28 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.1-0
+- Removed extraneous cacerts keys
+- Updated the README
+- Fixed code comments
+
+* Sat Mar 19 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+- Added the ability to copy from arbitrary OS locations for pki::copy. This was
+  mainly to support stunnel.
+
+* Tue Feb 23 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-9
+- Added compliance function support
+
+* Mon Jan 18 2016 Carl Caum <carl@puppetlabs.com> - 4.1.0-8
+- Allow PKI file content source to be modified.
+
+* Mon Dec 14 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-7
+- Remove erroneous test5.simp.vm key from the keydist directory
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.0-6
+- Migration to simplib and simpcat (lib/ only)
+
+* Tue Oct 13 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-5
+- If a directory is placed in keydist/cacerts, the directory structure is copied
+  to pki/cacerts, and all certs in subdirectories are appended to cacerts.pem.
+- If a directory is removed from keydist/cacerts, it is now forcibly removed
+  from .cacerts_ingress.
+
+* Thu Feb 12 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-4
+- Moved things to the new 'simp' environment
+- Ensure the requirements on packages are appropriately defined
+
+* Mon Feb 09 2015 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-3
+- A public RSA key is now generated off off the system private key, and
+  placed in /etc/pki/public/fqdn_rsa.pem
+
+* Sun Jun 22 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-2
+- Removed MD5 file checksums for FIPS compliance.
+
+* Fri Jun 20 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-2
+- Modified code in the pki_cert_sync provider for Ruby 2
+  compatibility.
+
+* Thu May 15 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-1
+- Updated pki_cert_sync to (re)build a concatenated cacerts.pem file which is
+  a bundled file of all valid CA certs in /etc/pki/cacerts.
+
+* Tue Apr 08 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-0
+- Updated manifests for puppet 3 and hiera compatibility.
+- Refactored manifests to pass all lint tests.
+- Removed the pki::pre class as all functionality now exists in the pki class.
+- Added spec tests.
+
+* Mon Mar 17 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Added a pki::copy define for properly copying the entire PKI set to an
+  alternate location on the system with proper ordering.
+- Rolled the pki::pre class into the main pki class.
+
+* Mon Feb 17 2014 Kendall Moore <kmoore@keywcorp.com> - 2.0.0-6
+- Added autorequire to pki_cert_sync for file destination.
+
+* Fri May 31 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-5
+- Created a native type to replace the hack set of execs for CA certificate
+  synchronization. This is not perfect but it is far faster and better.
+  Ideally, the type would be able to pull the files from the Puppet server
+  itself. Also, the file resource for '/etc/pki/cacerts' was preserved for
+  legacy code notification compatibility.
+
+* Wed Apr 11 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-4
+- Moved mit-tests to /usr/share/simp...
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Mar 02 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-3
+- Improved test stubs.
+
+* Wed Dec 14 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-2
+- Added an initial suite of tests
+- Fixed the creation of certificate hashes and now hash on 'subject' not 'issuer'.
+- Updated the spec file to not require a separate file list.
+- The certificate hash script had errors with cert hashes beginning with a '0'
+  as well as hashing on the issuer not the subject. Also, cleaned up the way
+  the intermediate directory cleanup is handled.
+
+* Thu Oct 27 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-1
+- Updated the PKI module to create a two-step certificate placement so that the
+  certificate hashes can be generated on the client. This is done due to RHEL6
+  using a different hashing algorithm than RHEL5
+
+* Tue Jan 11 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1-2
+- Converting all spec files to check for directories prior to copy.
+
+* Thu Jun 10 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-1
+- No templates to copy in caused an RPM build failure.
+
+* Mon May 24 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-0
+- Code refactor and doc updates.

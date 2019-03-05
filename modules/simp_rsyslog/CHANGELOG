@@ -1,0 +1,73 @@
+* Wed Oct 17 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.3.0-0
+- Updated acceptance test to run rsyslog twice then check for idempotence.
+
+* Tue Sep 11 2018 Nick Miller <nick.miller@onyxpoint.com> - 0.3.0-0
+- Removed hardcoded strings
+  - Make directory where logs are gathered configurable
+  - Also make rules that organizes them configurable
+- Update systemd fixtures and CI assets
+- Add support for Puppet 5 and OEL
+- Use iptables module in acceptance tests instead of hand generated rules
+
+* Fri Sep 07 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 0.3.0-0
+- Drop Hiera 4 support
+
+* Mon Aug 27 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.3.0-0
+- Update simp_rsyslog::forward to allow configuration of the
+  StreamDriverPermittedPeers directive in the forwarding rule actions
+  for the remote rsyslog servers.  This allows the user to set the correct
+  StreamDriverPermittedPeers value, when the default value is incorrect
+  (e.g., when IP addresses are used in simp_rsyslog::log_servers or
+  simp_rsyslog::failover_servers and one or more of those servers
+  is not in the same domain as the client).
+
+* Mon Aug 27 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.3.0-0
+- Remove redundant rules for sudosh since the puppet module will correctly take
+  care of adding those rules
+- Add support for tlog since it will be commonly replacing sudosh across the
+  SIMP infrastructure
+
+* Wed Sep 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.2.0-0
+- Add processing for aide logs
+
+* Wed Aug 23 2017 Jeanne Greulich <jeanne.greulich@onypoint.com> - 0.2.0-0
+- added processing for snmpd logs
+
+* Tue Aug 01 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.1.2-0
+- Forge release mistake version bump
+
+* Thu Jul 27 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.1.1-0
+- Fix bug in rule that ensures local audispd log messages are not duplicated
+
+* Wed May 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.1.0-0
+- Fix bug whereby audit logs were not being forwarded to remote syslog servers.
+- Fix bugs whereby simp_rsyslog::log_collection and simp_rsyslog::log_openldap
+  parameters were overriding simp_rsyslog::default_logs instead of being merged.
+- Work around rsyslog inconsistent message parsing behavior that prevented
+  iptables logs from being written to iptables.log and/or being forwarded,
+  for some versions of rsyslog.
+- Ensure local audispd log messages are not duplicated.
+- Adjust local rule ordering to ensure local sudosh and apache (httpd)
+  log messages are written to their own log files.
+- Restore writing of local puppet and puppet-server messages to their
+  own files, by adjusting local security rsyslog rule from simp_rsyslog::local.
+- Update puppet requirement in metadata.json
+
+* Wed Apr 19 2017 Nick Markowski <nmarkowski@keywcorp.com> - 0.1.0-0
+- Updated logrotate to use new lastaction API
+
+* Thu Mar 23 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.0.3
+-  Fixed path for systemctl
+
+* Fri Feb 24 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.0.2
+- Fixed directory for log rotate of central log server
+- add warning if possible log looping detected
+
+* Thu Feb 08 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 0.0.1
+- Fix path for service to /sbin/service for CentOS 6
+
+* Wed Feb 08 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 0.0.1
+- Fix bug in logrotate rule for simp_rsyslog server
+
+* Tue Dec 27 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1
+- This is the first release of the new simp_rsyslog profile module

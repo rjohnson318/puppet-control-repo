@@ -1,0 +1,77 @@
+{
+  "name": "simp-stunnel",
+  "version": "6.4.0",
+  "author": "SIMP Team",
+  "summary": "manages stunnel with PKI support",
+  "license": "Apache-2.0",
+  "source": "https://github.com/simp/pupmod-simp-stunnel",
+  "project_page": "https://github.com/simp/pupmod-simp-stunnel",
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "stunnel",
+    "pki",
+    "tls",
+    "ssl",
+    "tunnel"
+  ],
+  "dependencies": [
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": ">= 2.2.0 < 5.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.1 < 5.0.0"
+    },
+    {
+      "name": "simp/haveged",
+      "version_requirement": ">= 0.3.0 < 1.0.0"
+    },
+    {
+      "name": "simp/iptables",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/pki",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    },
+    {
+      "name": "simp/simplib",
+      "version_requirement": ">= 3.12.0 < 4.0.0"
+    },
+    {
+      "name": "simp/tcpwrappers",
+      "version_requirement": ">= 6.0.0 < 7.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.4 < 6.0.0"
+    }
+  ]
+}

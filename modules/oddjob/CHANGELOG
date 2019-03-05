@@ -1,0 +1,29 @@
+* Tue Nov 06 2018 Liz Nemsick <lnemsick-simp@gmail.com> - 2.1.0-0
+- Update to onyxpoint OEL boxes in acceptance tests
+- Update badges and contribution guide URL in README.md
+
+* Thu Oct 11 2018 Nick Miller <nick.miller@onyxpoint.com> - 2.1.0-0
+- Added $package_ensure and $oddbob::mkhomedir::package_ensure parameter
+  - Changed the packages from 'latest' to 'installed'
+  - It will also respect `simp_options::package_ensure`
+
+* Fri Mar 23 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-0
+- Add support for Puppet 5 and OEL
+
+* Thu Jul 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.1-0
+- Confine puppet version in metadata.json
+
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich@onyxpoint.com> - 2.0.0-0
+- Bump major version for SIMP 6.0
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.2-0
+- Minor cleanup
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 1.0.0-2
+- migration to simplib and simpcat (lib/ only)
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-1
+- Changed puppet-server requirement to puppet
+
+* Wed Jul 23 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
+- Created the first cut at the oddjob module for use by PAM

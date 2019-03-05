@@ -1,0 +1,114 @@
+* Fri Aug 24 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
+- Add support for Puppet 5 and OEL
+- Added $package_ensure parameter
+  - Changed the package from 'latest' to 'installed'
+  - It will also respect `simp_options::package_ensure`
+
+* Fri Jun 16 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.2-0
+- Update to Puppet 4 custom functions
+- Update puppet requirement and remove OBE pe requirement in metadata.json
+
+* Tue Jan 24 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.0.1-0
+- Updated data types to use new Simplib types
+- Corrected simp_options lookups to not have a context prefix of '::'
+
+* Wed Dec 07 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.0-0
+- Use simp_options module for global catalysts
+- Fix bug in xinetd.service.erb that caused an inadvertant newline between the
+  IP address and port in a redirect configuration line in the generated file.
+- Fix bug in xinetd.service.erb in which the instances and mdns configuration
+  lines were omitted from the generated file.
+- Fixed bug in xinetd.service.erb in which includedir and include were specified
+  within a service declaration and formatted incorrectly.
+- Fixed bug in validation of syslog facility
+- Fixed bugs in validation of ::xinetd $passenv and $disable parameters
+- Fixed bugs in validation of ::xinetd::service $x_id and $rpc_version parameters
+- Minor cleanup
+
+* Thu Dec 01 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.1-0
+- Removed unnecessary dependency and call to pupmod-simp-rsync
+
+* Tue Nov 22 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 3.0.0-0
+- Update version to reflect SIMP6 dependencies
+- Minor cleanup
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.1.2-0
+- Minor cleanup
+
+* Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.1.2-0
+- Updated iptables dependency version
+
+* Tue Mar 01 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 2.1.0-5
+- Added compliance function support
+
+* Tue Nov 10 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 2.1.0-4
+- migration to simplib and simpcat (lib/ only)
+
+* Mon Apr 06 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-3
+- Updated the default log_type to 'SYSLOG authpriv'
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-2
+- Changed puppet-server requirement to puppet
+
+* Sun Jun 22 2014 Kendall Moore <kmoore@keywcorp.com> - 2.1.0-1
+- Removed MD5 file checksums for FIPS compliance.
+
+* Thu Jun 19 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-1
+- Ensure that 'lfrom' in xinetd.conf.erb is not converted to an Array
+  explicitly.
+
+* Fri Jan 3 2014 Nick Markowski <nmarkowski@keywcorp.com> - 2.1.0-0
+- Updated module for puppet3/hiera compatibility, and optimized code for lint tests,
+  and puppet-rspec.
+
+* Tue Oct 08 2013 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-7
+- Updated template to reference instance variables with @
+
+* Fri Nov 30 2012 Maintenance
+2.0.0-6
+- Created a Cucumber test to ensure that xinetd installs correctly when adding
+  include xinetd in the puppet server manifest.
+
+* Thu Jun 07 2012 Maintenance
+2.0.0-5
+- Ensure that Arrays in templates are flattened.
+- Call facts as instance variables.
+- Moved mit-tests to /usr/share/simp...
+- Converted internal nets2cidr code to use the 'common' function.
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Apr 06 2012 Maintenance
+2.0.0-4
+- Templated xinetd.conf.
+
+* Fri Mar 02 2012 Maintenance
+2.0.0-3
+- Improved test stubs.
+
+* Mon Dec 26 2011 Maintenance
+2.0.0-2
+- Updated the spec file to not require a separate file list.
+
+* Fri Feb 04 2011 Maintenance - 2.0.0-1
+- Changed all instances of defined(Class['foo']) to defined('foo') per the
+  directions from the Puppet mailing list.
+- Updated to use rsync native type
+
+* Tue Jan 11 2011 Maintenance
+2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Maintenance - 1-2
+- Converting all spec files to check for directories prior to copy.
+
+* Thu Sep 09 2010 Maintenance
+1.0-1
+- Replaced tcpwrappers::tcpwrappers_allow with tcpwrappers::allow.
+
+* Mon May 24 2010 Maintenance
+1.0-0
+- Code refactoring.
+
+* Thu Oct 1 2009 Maintenance
+0.1-11
+- Removed much of the unnecessary whitespace from the template file results.

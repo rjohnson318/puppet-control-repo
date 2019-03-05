@@ -1,0 +1,60 @@
+syncrepl rid=<%= @name %>
+  provider=<%= @provider %>
+  type=<%= @syncrepl_type %>
+<% if @interval -%>
+  interval=<%= @interval %>
+<% end -%>
+  retry="<%= @syncrepl_retry %>"
+  searchbase="<%= @searchbase %>"
+<% if @filter -%>
+  filter="<%= @filter %>"
+<% end -%>
+  scope="<%= @syncrepl_scope %>"
+  attrs="<%= @attrs %>"
+<% if @attrsonly -%>
+  attrsonly
+<% end -%>
+  sizelimit=<%= @sizelimit %>
+  timelimit=<%= @timelimit %>
+  schemachecking=<%= @schemachecking %>
+<% if @starttls -%>
+  starttls=critical
+<% end -%>
+<% if @bindmethod -%>
+  bindmethod=<%= @bindmethod %>
+<% end -%>
+<% if @binddn -%>
+  binddn="<%= @binddn %>"
+<% end -%>
+<% if @saslmech -%>
+  saslmech=<%= @saslmech %>
+<% end -%>
+<% if @authcid -%>
+  authcid=<%= @authcid %>
+<% end -%>
+<% if @authzid -%>
+  authzid=<%= @authzid %>
+<% end -%>
+<% if @credentials -%>
+  credentials=<%= @credentials %>
+<% end -%>
+<% if @realm -%>
+  realm=<%= @realm %>
+<% end -%>
+<% if @secprops -%>
+  secprops=<%= @secprops %>
+<% end -%>
+<% if @logbase -%>
+  logbase=<%= @logbase %>
+<% end -%>
+<% if @logfilter -%>
+  logfilter=<%= @logfilter %>
+<% end -%>
+  syncdata=<%= @syncdata %>
+<% if @updateref -%>
+<%   Array(@updateref).flatten.each do |ur| -%>
+updateref <%= ur %>
+<%   end -%>
+<% else -%>
+updateref <%= @provider %>
+<% end -%>

@@ -1,0 +1,121 @@
+* Tue Oct 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.3.0-0
+- Added Redhat 7.5 services to default service ignore list.
+- Updated ruby version to 2.4.4
+- Updated Gemfile to ask for puppet 5
+- Update badges and contribution guide URL in README.md
+
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.0-0
+- Update Hiera 4 to Hiera 5
+
+* Fri Aug 24 2018 Nick Miller <nick.miller@onypoint.com> - 3.3.0-0
+- Add support for Puppet 5 and OEL
+
+* Fri Jul 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.6-0
+- Add simp_client_bootstrap service to the ignore list.  If this
+  is omitted from the ignore list, svckill will kill the bootstrap
+  process of SIMP clients, while they are boostrapping the system.
+
+* Fri Jun 22 2018 Nick Miller <nick.miller@onypoint.com> - 3.2.6-0
+- Update CI assets
+
+* Fri Feb 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.5-0
+- Update upperbound on puppetlabs/concat version to < 5.0.0
+
+* Mon Oct 02 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.4-0
+- Fix bug in which svckill provider can fail on a server for which
+  there are are no aliased, SystemD services.
+
+* Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.3-0
+- Update concat version in metadata.json & build/rpm_metadata/requires
+
+* Tue Aug 01 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.2-0
+- Tweak spec tests so will run in docker containers
+
+* Fri Jun 23 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
+- Fix bug whereby svckill provider's insync_values? emits
+  'Unknown failure' message during normal operation.
+
+* Fri Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
+- Implemented simplib::knockout on the ignore list so users can
+  remove items in the default list via hiera.
+
+* Wed Apr 19 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.2.1-0
+- In the service kill provider, not all services queried by 'Name'
+  with systemctl would return a name.  That caused a break in symlink
+  logic, rendering a majority of aliases to remain undetected.  Error
+  detection has been added and the symlink logic has been re-worked.
+
+* Thu Mar 23 2017 Trevor Vaughan - 3.2.0-0
+- Enabled the new, kinder, svckill by setting the default mode to 'warning'
+- Added a `svckill::enable` parameter to be able to disable svckill from Hiera
+  easily
+
+* Fri Mar 17 2017 Nick Miller, Ryan Russell-Yates, Liz Nemsick - 3.1.1-0
+- Add acceptance test for symlinked services
+- Flesh out README
+- Remove OBE 'pe' requirement from metadata.json
+- Update puppet version in .travis.yaml
+
+* Fri Dec 30 2016 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.1.0-0
+- Use hiera moduledata instead of a hard coded array
+- Add ignore for ^pe-.*
+
+* Sat Dec 24 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Updated to use the Puppet Concat module
+
+* Thu Dec 15 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 3.0.0-0
+- Use strongly typed parameters
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+
+* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+
+* Thu Jul 07 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.3-0
+- Added missing requires file and updated module to auto-generate
+  lua spec file.
+
+* Tue Jun 21 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.2-0
+- Ensure that calling '::svckill::ignore' does not include '::svckill' by
+  default.
+
+* Tue Apr 12 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.1.1-0
+- Updated custom type to remove deprecation warning
+
+* Thu Mar 10 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
+- Added a 'verbose' option to svckill which will enumerate all actions on
+  services if enabled.
+- Ensure that all relevant messages are passed back via the 'to_s' method so
+  that PuppetDB can obtain a full report.
+
+* Wed Feb 24 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.0-6
+- Minor linting fixes
+
+* Tue Nov 10 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 1.0.0-5
+- migration to simplib and simpcat (lib/ only)
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-4
+- Changed puppet-server requirement to puppet
+
+* Thu Aug 28 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-3
+- Fixed a long-standing bug where failing to stop a service would
+  prevent svckill from disabling it.
+- Added prefdm to the list of services to never kill.
+- Updated to not kill services that have definitions in puppet that
+  are aliased in systemd.
+
+* Thu Jun 19 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-2
+- Added support for systemd
+- Added support for regex ignore statements
+- Had to force the service provider to 'redhat' if it fell back to
+  'init' otherwise the startup scripts wouldn't be called
+
+* Fri May 09 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-1
+- Add 'rc' to the svckill list so that weird race conditions don't
+  render an Upstart-based system unbootable.
+
+* Wed Apr 16 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
+- First release of svckill as its own module.

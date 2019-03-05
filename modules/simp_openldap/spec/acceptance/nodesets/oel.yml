@@ -1,0 +1,51 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  server-el7:
+    roles:
+      - default
+      - server
+    platform: el-7-x86_64
+    box: onyxpoint/oel-7-x86_64
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      simp:
+        baseurl: https://packagecloud.io/simp-project/6_X_Dependencies/el/7/$basearch
+        gpgkeys:
+          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+  server-el6:
+    roles:
+      - server
+    platform: el-6-x86_64
+    box: onyxpoint/oel-6-x86_64
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      simp:
+        baseurl: https://packagecloud.io/simp-project/6_X_Dependencies/el/6/$basearch
+        gpgkeys:
+          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+  # slave-el7:
+  #   roles:
+  #     - slave
+  #   platform: el-7-x86_64
+  #   box: onyxpoint/oel-7-x86_64
+  #   hypervisor: <%= hypervisor %>
+  # slave-el6:
+  #   roles:
+  #     - slave
+  #   platform: el-6-x86_64
+  #   box: onyxpoint/oel-6-x86_64
+  #   hypervisor: <%= hypervisor %>
+CONFIG:
+  type: aio
+  vagrant_memsize: 256
+  log_level: verbose
+  synced_folder: disabled
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>

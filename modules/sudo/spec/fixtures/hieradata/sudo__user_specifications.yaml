@@ -1,0 +1,15 @@
+---
+sudo::user_specifications:
+  simp_su:
+    user_list: ['simp']
+    cmnd: ['/bin/su']
+  users_yum_update:
+    user_list:
+      - '%users'
+    cmnd:
+      - 'yum update'
+  test_resource:
+    user_list: ['%group']
+    cmnd: ['w']
+    runas: root
+    passwd: true

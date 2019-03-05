@@ -1,0 +1,13 @@
+---
+fixtures:
+  repositories:
+    iptables: https://github.com/simp/pupmod-simp-iptables
+    rsync: https://github.com/simp/pupmod-simp-rsync
+    simpcat: https://github.com/simp/pupmod-simp-simpcat
+    simplib: https://github.com/simp/pupmod-simp-simplib
+    stdlib:
+      repo: https://github.com/simp/puppetlabs-stdlib
+      branch: master
+  symlinks:
+    named: "#{source_dir}"
+

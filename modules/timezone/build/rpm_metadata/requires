@@ -1,0 +1,4 @@
+Obsoletes: pupmod-saz-timezone < 3.3.0-2016.1.obsolete
+Provides: pupmod-saz-timezone = 3.3.0-2016.1.obsolete
+Requires: pupmod-puppetlabs-stdlib >= 2.6.0
+Requires: pupmod-puppetlabs-stdlib < 5.0.0

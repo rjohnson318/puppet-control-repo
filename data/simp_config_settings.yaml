@@ -1,0 +1,195 @@
+#========================================================================
+# SIMP global configuration
+#
+# Generated for simp scenario on 2019-03-04 22:50:46
+# using simp-cli version 4.4.0
+#========================================================================
+---
+# === grub::password ===
+# The password to access GRUB.
+#
+# The value entered is used to set the GRUB password and to generate a hash
+# stored in grub::password.
+grub::password: grub.pbkdf2.sha512.10000.5494A3781EDA7B438840CA17F60228D30DFC2A08876288D486C887501CECF99D85EC70603E70AC84E4336EAA9A61A20762C37E500C3C8FD284756C88E4712FA6.47A29E1E5BF30A50C990B413D5474776C6A7091BC992B5672EE2FB1EDDDA7B24A50981ECCC0AD6D4E7F61D4C435EF7BD560DEE15A331A8B9C659180AE926AE85
+
+# === simp::runlevel ===
+# The default system runlevel (1-5).
+simp::runlevel: 3
+
+# === simp::yum::repo::local_os_updates::servers ===
+# The YUM server(s) for SIMP-managed, OS Update packages.
+simp::yum::repo::local_os_updates::servers:
+- "%{hiera('simp_options::puppet::server')}"
+
+# === simp::yum::repo::local_simp::servers ===
+# The YUM server(s) for SIMP-managed, SIMP and
+# SIMP dependency packages.
+simp::yum::repo::local_simp::servers:
+- "%{hiera('simp_options::puppet::server')}"
+
+# === simp_options::dns::search ===
+# The DNS domain search string.
+#
+# Remember to put these in the appropriate order for your environment!
+simp_options::dns::search:
+- ralphaeljohnson.com
+
+# === simp_options::dns::servers ===
+# A list of DNS servers for the managed hosts.
+#
+# If the first entry of this list is set to '127.0.0.1', then
+# all clients will configure themselves as caching DNS servers
+# pointing to the other entries in the list.
+#
+# If you have a system that's including the 'named' class and
+# is *not* in this list, then you'll need to set a variable at
+# the top of that node entry called $named_server to 'true'.
+# This will get around the convenience logic that was put in
+# place to handle the caching entries and will not attempt to
+# convert your system to a caching DNS server. You'll know
+# that you have this situation if you end up with a duplicate
+# definition for File['/etc/named.conf'].
+simp_options::dns::servers:
+- 192.168.1.1
+- 2600:4040:2010:cd00:20c:29ff:fe5a:8e40
+
+# === simp_options::fips ===
+# Prepare system to use FIPS mode.
+#
+# simp_options::fips enforces strict compliance with FIPS-140-2.  All core SIMP modules
+# can support this configuration. Enabling simp_options::fips here will enable
+# FIPS on this puppet environment.
+#
+# IMPORTANT:
+# (1) Be sure you know the security tradeoffs of FIPS-140-2 compliance.
+#     FIPS mode disables the use of MD5 and may require weaker ciphers or key
+#     lengths than your security policies allow.
+# (2) If the system is currently in FIPS mode and you set this option to false,
+#     the system will still work.  The reverse is not necessarily true.  See
+#     SIMP documentation for instructions on how to safely convert a non-FIPS
+#     system to a FIPS system.
+#
+simp_options::fips: true
+
+# === simp_options::ldap::base_dn ===
+# The Base Distinguished Name of the LDAP server.
+simp_options::ldap::base_dn: dc=ralphaeljohnson,dc=com
+
+# === simp_options::ldap::bind_dn ===
+# The LDAP Bind Distinguished Name.
+simp_options::ldap::bind_dn: cn=Administrator,cn=Users,dc=ralphaeljohnson,dc=com
+
+# === simp_options::ldap::bind_hash ===
+# The salted LDAP Bind password hash.
+simp_options::ldap::bind_hash: "{SSHA}2lbTAfZcH9zvEk5bZkg7Bv5CSqvdi1IX"
+
+# === simp_options::ldap::bind_pw ===
+# The LDAP Bind password.
+simp_options::ldap::bind_pw: RJrj502811!!!!
+
+# === simp_options::ldap::master ===
+# The LDAP master in URI form (ldap://server or ldaps:://server).
+simp_options::ldap::master: ldap://FIXME
+
+# === simp_options::ldap::sync_dn ===
+# The LDAP Sync Distinguished Name.
+simp_options::ldap::sync_dn: cn=Administrator,cn=Users,dc=ralphaeljohnson,dc=com
+
+# === simp_options::ldap::sync_hash ===
+#
+simp_options::ldap::sync_hash: "{SSHA}OZ00s91jRS2YLF5fpK+YwcT1EX8VTp4c"
+
+# === simp_options::ldap::sync_pw ===
+# The LDAP Sync password.
+simp_options::ldap::sync_pw: RJrj502811!!!!
+
+# === simp_options::ldap::uri ===
+# The list of OpenLDAP servers in URI form (ldap://server or ldaps:://server).
+simp_options::ldap::uri:
+- ldap://dc.ralphaeljohnson.com
+
+# === simp_options::ntpd::servers ===
+# Your network's NTP time servers.
+#
+# A consistent time source is critical to a functioning public key
+# infrastructure, and thus your site security. **DO NOT** attempt to
+# run multiple production systems using individual hardware clocks!
+#
+# For many networks, the default gateway (192.168.1.1) provides an NTP server.
+simp_options::ntpd::servers:
+- 0.centos.pool.ntp.org
+- 1.centos.pool.ntp.org
+- 2.centos.pool.ntp.org
+- 3.centos.pool.ntp.org
+
+# === simp_options::puppet::ca ===
+# The Puppet Certificate Authority.
+simp_options::puppet::ca: puppet.ralphaeljohnson.com
+
+# === simp_options::puppet::ca_port ===
+# The port on which the Puppet Certificate Authority will listen
+# (8141 by default).
+simp_options::puppet::ca_port: 8141
+
+# === simp_options::puppet::server ===
+# The Hostname or FQDN of the Puppet server.
+simp_options::puppet::server: puppet.ralphaeljohnson.com
+
+# === simp_options::syslog::log_servers ===
+# The log server(s) to receive forwarded logs.
+#
+# No log forwarding is enabled when this list is empty.  Only use hostnames
+# here if at all possible.
+simp_options::syslog::log_servers: []
+
+# === simp_options::trusted_nets ===
+# A list of subnets to permit, in CIDR notation.
+#
+# If you need this to be more (or less) restrictive for a given class,
+# you can override it in Hiera.
+simp_options::trusted_nets:
+- 192.168.1.0/24
+
+# === sssd::domains ===
+# A list of domains for SSSD to use.
+#
+# * When `simp_options::ldap` is true, this field should include `LDAP`.
+# * When `simp_options::ldap` is false, this field must be a valid
+#   domain ('Local' and/or a custom domain) or the sssd service will
+#   fail to start.
+#
+sssd::domains:
+- LDAP
+
+# === svckill::mode ===
+# Strategy svckill should use when it encounters undeclared services.
+#
+# 'enforcing' = Shut down and disable all services not listed in your
+#               manifests or the exclusion file
+# 'warning'   = Only report what undeclared services should be shut
+#               down and disabled, without actually making the changes
+#               to the system
+#
+# NOTICE: svckill is the mechanism that SIMP uses to comply with the
+# requirement that no unauthorized services are running on your system.
+# If you are fully aware of all services that need to be running on the
+# system, including any custom applications, use 'enforcing'.  If you
+# first need to ascertain which services should be running on the system,
+# use 'warning'.
+svckill::mode: warning
+
+# === useradd::securetty ===
+# A list of TTYs for which the root user can login.
+#
+# When useradd::securetty is an empty list, the system will satisfy FISMA
+# regulations, which require root login via any TTY (including the console)
+# to be disabled.  For some systems, the inability to login as root via the
+# console is problematic.  In that case, you may wish to include at least
+# tty0 to the list of allowed TTYs, despite the security risk.
+#
+useradd::securetty: []
+
+
+classes:
+  - simp::yum::repo::local_os_updates
+  - simp::yum::repo::local_simp

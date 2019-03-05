@@ -1,0 +1,10 @@
+---
+version: 5
+defaults:
+  datadir: data
+  data_hash: yaml_data
+hierarchy:
+  - name: "journald"
+    path: "journald/is_%{facts.systemd}.yaml"
+  - name: "common"
+    path: "common.yaml"

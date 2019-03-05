@@ -1,0 +1,10 @@
+* Fri Dec 07 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.0.3-0
+- Pulled latest fixes from saz time zone.  Needed for Centos 7.5 which
+  requires localtime to be a link.
+
+* Thu Oct 11 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.2-0
+- Bump to support Puppet 5
+- Jumped to 5.0.2 to skip past the upstream version numbers
+
+* Thu Sep 28 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Initial fork of saz-timezone with Puppet 4+ support

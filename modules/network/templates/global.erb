@@ -1,0 +1,47 @@
+<% bool_to_yesno = { true => 'yes', false => 'no' } -%>
+<% if !@gateway.nil? then -%>
+GATEWAY=<%= @gateway %>
+<% end -%>
+<% if !@gatewaydev.nil? then -%>
+GATEWAYDEV=<%= @gatewaydev %>
+<% end -%>
+HOSTNAME=<%= @hostname %>
+<% if !@ipv6_defaultdev.nil? then -%>
+IPV6_DEFAULTDEV=<%= @ipv6_defaultdev %>
+<% end -%>
+<% if !@ipv6_defaultgw.nil? then -%>
+IPV6_DEFAULTGW=<%= @ipv6_defaultgw %>
+<% end -%>
+NETWORKING_IPV6=<%= bool_to_yesno[@networking_ipv6] %>
+<% if !@network.nil? then -%>
+NETWORK=<%= @network %>
+<% end -%>
+<% if !@nisdomain.nil? then -%>
+NISDOMAIN=<%= @nisdomain %>
+<% end -%>
+<% if @nozeroconf then -%>
+NOZEROCONF=yes
+<% end -%>
+PEERDNS=<%= bool_to_yesno[@peerdns] %>
+NETWORKING=<%= bool_to_yesno[@networking] %>
+<% if @vlan then -%>
+VLAN=yes
+<% end -%>
+<% if !@networkdelay.nil? then -%>
+NETWORKDELAY=<%= @networkdelay %>
+<% end -%>
+<% if @ipv6forwarding then -%>
+IPV6FORWARDING=yes
+<% end -%>
+<% if !@ipv6_autoconf.nil? then -%>
+IPV6_AUTOCONF=<%= bool_to_yesno[@ipv6_autoconf] -%>
+<% end -%>
+<% if !@ipv6_router.nil? then -%>
+IPV6_ROUTER=<%= bool_to_yesno[@ipv6_router] -%>
+<% end -%>
+<% if !@ipv6_autotunnel.nil? then -%>
+IPV6_AUTOTUNNEL=<%= bool_to_yesno[@ipv6_autotunnel] %>
+<% end -%>
+<% if @persistent_dhclient then -%>
+PERSISTENT_DHCLIENT='1'
+<% end -%>

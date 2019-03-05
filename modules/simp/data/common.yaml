@@ -1,0 +1,37 @@
+---
+lookup_options:
+  simp::scenario_map:
+    merge:
+      strategy: deep
+      # Disable this for now.
+      #knockout_prefix: --
+  simp::classes:
+    merge:
+      strategy: unique
+      # Disable this for now.
+      #knockout_prefix: --
+  simp::server::scenario_map:
+    merge:
+      strategy: deep
+      # Disable this for now.
+      #knockout_prefix: --
+  simp::server::classes:
+    merge:
+      strategy: unique
+      # Disable this for now.
+      #knockout_prefix: --
+simp::vardir_owner: 'root'
+simp::vardir_group: 'root'
+simp::vardir_mode: '0750'
+simp::scenario_map:
+  none: []
+  remote_access: []
+  poss: []
+  simp_lite: []
+  simp: []
+simp::server::scenario_map:
+  none: []
+  remote_access: "%{alias('simp::server::data')}"
+  poss: "%{alias('simp::server::data')}"
+  simp_lite: "%{alias('simp::server::data')}"
+  simp: "%{alias('simp::server::data')}"

@@ -1,0 +1,78 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
+HOSTS:
+  server-el7:
+    roles:
+      - server
+      - default
+      - master
+      - simp_server
+      - el7
+    platform:   el-7-x86_64
+    box:        centos/7
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-7
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/352C64E5.txt
+      simp:
+        baseurl: 'https://packagecloud.io/simp-project/6_X/el/$releasever/$basearch'
+        gpgkeys:
+          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+      simp_dependencies:
+        baseurl: 'https://packagecloud.io/simp-project/6_X_Dependencies/el/$releasever/$basearch'
+        gpgkeys:
+          - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+          - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+          - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
+          - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
+          - https://getfedora.org/static/352C64E5.txt
+
+  server-el6:
+    roles:
+      - simp_server
+      - el6
+    platform:   el-6-x86_64
+    box:        centos/6
+    hypervisor: <%= hypervisor %>
+    yum_repos:
+      updates:
+        baseurl: 'http://mirror.centos.org/centos/$releasever/os/$basearch/'
+        gpgkeys:
+          - https://www.centos.org/keys/RPM-GPG-KEY-CentOS-6
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
+      simp:
+        baseurl: 'https://packagecloud.io/simp-project/6_X/el/$releasever/$basearch'
+        gpgkeys:
+         - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+      simp_dependencies:
+        baseurl: 'https://packagecloud.io/simp-project/6_X_Dependencies/el/$releasever/$basearch'
+        gpgkeys:
+         - https://raw.githubusercontent.com/NationalSecurityAgency/SIMP/master/GPGKEYS/RPM-GPG-KEY-SIMP
+         - https://download.simp-project.com/simp/GPGKEYS/RPM-GPG-KEY-SIMP-6
+         - https://yum.puppetlabs.com/RPM-GPG-KEY-puppetlabs
+         - https://yum.puppetlabs.com/RPM-GPG-KEY-puppet
+         - https://apt.postgresql.org/pub/repos/yum/RPM-GPG-KEY-PGDG-94
+         - https://getfedora.org/static/0608B895.txt
+CONFIG:
+  log_level: verbose
+  type: aio
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>

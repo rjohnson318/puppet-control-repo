@@ -1,0 +1,472 @@
+* Thu Oct 18 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.6.0-0
+- Added $simp::server::yum::createrepo_ensure parameter
+  - Changed the package from 'latest' to 'installed'
+  - It will also respect `simp_options::package_ensure`
+
+* Wed Oct 17 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.6.0-0
+- Update fixtures to use correct branch of timezone.  (Soma as in
+  the tracking file for 6.3
+
+* Wed Oct 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
+- Remove unnecessary simp/freeradius dependency in metadata.json
+
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
+- Update Hiera 4 to Hiera 5
+
+* Thu Aug 30 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.6.0-0
+- Fix a usability bug in which simp::server::kickstart did not allow
+  the bootstrap scripts provided by simp::server::kickstart::runpuppet
+  and simp::server::kickstart::simp_client_bootstrap to be configured
+  via hieradata, when those classes were managed by simp::server::kickstart.
+
+* Mon Aug 27 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.0-0
+- Switch from using 'sudosh' as the default logging shell to using 'tlog'
+- Add a 'simp::admin::default_admin_sudo_cmnds' option to allow users to easily
+  change the default sudo-accessible commands from Hiera.
+- Ensure that the global filebucket setting occurs prior to class inclusion to
+  match the new Puppet 5 method of setting resource defaults.
+
+* Tue Jul 17 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.6.0-0
+- Added tests and support for OEL and Puppet 5
+  - Setting the default filebucket in a module no longer works, so
+    ``simp::enable_filebucketing`` will do nothing in puppet version >= 5
+- Fixed some linting issues
+
+* Wed Jun 20 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
+- Use the sudo::user_specification default host list which is correct for
+  almost all cases
+- Update version range of auditd dependency in metadata.json
+
+* Fri Jun 08 2018 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.5.0-0
+- Add Windows support
+- Change /root perms to RPM default of 0550
+- Change /etc/rc.d/rc.local perms to RPM default of 0755
+
+* Thu May 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
+- Created standalone SIMP client bootstrap script, bootstrap_simp_client.
+- Created simp::server::kickstart::runpuppet replacement,
+  simp::server::kickstart::simp_client_bootstrap, that manages service
+  files for kickstarting a SIMP client, using bootstrap_simp_client
+  and either a sysv (simp_client_bootstrap) or a systemd
+  (simp_client_bootstrap.service) service script. This replacement
+  provides the following improvements:
+  - Exponential backoff of requests to the Puppet server, to minimize
+    Puppet server overload.
+  - Configurable bootstrap timeout.
+  - An option to force a client reboot on client bootstrap failure.
+  - More effective puppet agent processing.  The bootstrapping
+    takes fewer puppet agent runs.
+  - Finer grained control of the bootstrap algorithm.
+  - Error handling
+    - Bootstrap operation errors are now detected and logged.
+    - Failed puppet agent runs are now retried, instead of blindly
+      continuing on.
+  - Timestamped log messages in the bootstrap log file.  This includes
+    messages from bootstrap_simp_client, puppet agent, and fixfiles.
+    service start
+- simp::server::kickstart::runpuppet is deprecated and will be removed
+  in a future release
+
+* Fri Apr 27 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.5.0-0
+- Add simp::netconsole class to manage the netconsole kernel feature
+- Fix a few puppet-lint warnings
+
+* Fri Apr 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
+- Set permissions of /etc/rc.d/rc.local to 0750, instead of 0770,
+
+* Mon Apr 23 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> 4.5.0-0
+- simp_options::selinux was supposed to determine if the selinux module was
+  included.  However, this value was getting overridden by the class lists
+  which independently included the selinux module. This change removes the
+  unused simp_options::selinux setting to eliminate the confusion.  See the
+  scenario maps in the data section to see what scenarios include the selinux
+  module.  See the selinux module to see how to use puppet to enable/disable
+  selinux.  This may change the defaults for selinux in the `simp_lite`
+  scenario.
+
+* Tue Apr 17 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
+- Narrow the focus of the internal hieradata to ensure correct runs on
+  unsupported OSs
+- Update unsupported OS tests
+- Add a test to ensure that an error is throw if an invalid scenario is
+  specified
+
+* Mon Apr 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.5.0-0
+- In the runpuppet init script used to bootstrap kickstarted clients,
+  for EL7, persist the hostname retrieved by DHCP as a static hostname.
+  This prevents problems that can arise on EL7 when the DHCP lease
+  expires in the middle of the client bootstrap puppet runs.
+
+* Mon Apr 02 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.5.0-0
+- changed permission on ctrl-alt-del-capture.service to prevent "no effect"
+  errors in system logs.
+
+* Thu Mar 29 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
+- Ensure that a file exists on EL 6 if portreserve is enabled so that the
+  portreserve service does not flap
+
+* Tue Mar 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- In simp::prelink, ensure prelinking is disabled when the server is
+  in FIPS mode, as FIPS is incompatible with prelinking.
+
+* Fri Mar 16 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.4.0-0
+- Updated metadata.json to include trlinkin/nsswitch
+
+* Wed Mar 14 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.0-0
+- Fixed a bug where if the `puppet_settings` fact did not exist, users in the
+  `%administrators` group could `rm -rf` any path
+- The value in the hash was also corrected to
+  `$facts['puppet_settings']['main']['ssldir']`
+
+* Fri Mar 09 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Set the ownership and permissions of puppet/puppetdb.conf in
+  simp::puppetdb, instead of allowing them to be set to those of
+  the process running puppet, if the file needs to be created.
+  This is part of the fix to the failure of SIMP to bootstrap on a
+  system on which root's umask has already been restricted to 077.
+
+* Mon Feb 26 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
+- Remove management of the 'root' user's groups in the User resource
+  - Works around https://tickets.puppetlabs.com/browse/PUP-8470
+
+* Mon Feb 12 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Remove non-working mcollective remnants
+- Remove unnecessary dependency on puppetlabs/inifile.
+
+* Mon Jan 22 2018 Nick Miller <nick.miller@onyxpoint.com> - 4.4.0-0
+- When the host is a member of an IPA domain, do not include the
+  `simp_openldap::client` class.
+- Update upper bound for concat dependency
+
+* Tue Jan 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 4.4.0-0
+- Add simp::prelink to the class lists for both the SIMP server and
+  SIMP clients. By default, simp::prelink ensures any prelinking has
+  been removed and that the prelink package is not installed. This
+  satisfies the SCAP Security Guide's OVAL check
+  xccdf_org.ssgproject.content_rule_disable_prelink.
+
+* Mon Nov 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.3.0-0
+- In simp::sysctl, add parameters for net.ipv6.conf.all.accept_source_route
+  and net.ipv6.conf.default.accept_source_route and set them to 0 by
+  default.  This satisfies STIG CCI-0000366.
+- Small test fixes to allow acceptance tests to run on servers in FIPS mode
+
+* Thu Oct 19 2017  Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.2-0
+- Lowered default value of parameter simp::sssd::client::min_id to 500
+
+* Fri Oct 06 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.1-0
+- Added simp/timezone to the module dependency list
+
+* Wed Oct 04 2017 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.2.0-0
+- Fail compilation for a subset of SIMP capabilities, if they are
+  used on unsupported operating systems.
+
+* Wed Oct 04 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+- Add an acceptance test for the 'poss' scenario using Oracle EL6
+
+* Wed Aug 23 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.1-0
+- change simp::server::classes's lookup_options to be 'unique'
+
+* Fri Aug 18 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.1.1-0
+- Update concat version in metadata.json
+- Add concat dependency to build/rpm_metadata/requires
+
+* Thu Aug 17 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 4.1.1-0
+- Add camptocamp/kmod to list of dependencies
+
+* Mon Jul 31 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.1.1-0
+- call simp::nsswitch in simp and simp-lite scenario instead of just nsswitch
+  to set nsswitch according to simp_options instead of just the nsswitch defaults.
+
+* Thu Jul 20 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.1-0
+- Refactor classification lists to be RedHat specific to support other target
+  platforms
+
+* Thu Jun 15 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
+- simp::yum::internet_simp* repos now use facts in Yum repo baseurls in place
+  of yum macros, who's output is not reliable.
+
+* Fri Jun 09 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-0
+- Due to lack of support for knockout_prefix for arrays in older versions
+  of Puppet, simp::knockout functionality has been moved to
+  simplib::knockout because multiple modules are using the function.
+- A wrapper has been put around simp::knockout for backwards-compatibility
+  in our code.
+- Update puppet requirement in metadata.json
+
+* Tue May 30 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
+- Updated the simp::kmod_blacklist class to also fully disable the module
+  loading
+- Provide the ability to override the disabled modules locally on the system by
+  default but also allow for enforcement
+- Provide the ability to lock module loading if the underlying OS has the
+  capability
+
+* Wed May 10 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-0
+- Added a 'remote_access' scenario
+
+* Mon May 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.1.0-0
+- Use the correct simp_options global catalyst for base_apps::ensure
+
+* Mon Apr 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 4.1.0-0
+- Set the poklit administrator group
+- Merged base_services into base_apps, leaving a shim in base_services
+
+* Thu Apr 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 4.0.0-0
+- Updated apache rsync hosts_allow to $trusted_nets. The previous value
+  of 127.0.0.1 would not allow apache to rsync if stunnel was disabled.
+
+* Mon Apr 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Updated the YUM configuration so that no repos are set up by default and it
+  is simple to connect to the public repos for SIMP.
+- Yum repos are now individual profiles that can be included ala carte
+
+* Wed Mar 29 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 4.0.0-0
+- Fixed the confusion with the 'classes' global Array
+- Added support for a 'simp::classes' Array with a knockout prefix of '--'
+- Moved scenarios into data in modules
+
+* Thu Mar 23 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.1.0-0
+  - move fips from base scenario to simp scenario
+  - made the inclusion of fips module not depend on simp_options::fips setting
+  - it is included because it used to turn fips on and off.
+
+* Wed Mar 01 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.1.0-0
+- Added the new Grafana GPG key to the list and retained the old one until they
+  re-sign their old packages.
+- Add the basic SIMP scenarios to the module
+  - simp -> full SIMP profile
+  - simp_lite -> SIMP with the more aggressive parts removed
+  - poss -> only connect to the puppet server
+
+* Fri Feb 24 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.0.1-0
+- Moved runpuppet template to its own class so the rupuppet script
+  can be managed independently from the simp::server::kickstart class
+
+* Fri Feb 17 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.0.0-0
+- Refine list of GPG keys used by simp::yum::server
+
+* Tue Feb 14 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Ensure that the filebucket is appropriately set for both local and remote use
+
+* Mon Feb 06 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.0.0-0
+- Modified rsync stunnel logic to add a connection to the rsync server
+  only if the machine is *not* the rsync server.
+
+* Wed Jan 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.0.0-0
+- Removing including of simp::server::* classes from the simp::server
+  class in favor of including them in the class list in hiera.
+- Removed any dangling references or dependencies on ganglia or snmpd
+- Rearranged logic in sysctl and removed the ipv6 catalyst. ipv6 will now be
+  unmanaged by default.
+- Beefed up simp::server class to include more default classes
+- Made $rsync_stunnel enabled by default
+
+* Thu Jan 05 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.0.0-0
+- Added a 'simp::ctrl_alt_del' class for managing the behavior of giving a
+  system the three finger death punch
+
+* Mon Dec 05 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
+- Added simp::kmod_blacklist profile to manage the kernel blacklist using puppet-kmod
+  - config migrated from simplib
+
+* Thu Dec 02 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.1-0
+- Removed pupmod-simp-sysctl in favor of augeas-sysctl
+
+* Thu Nov 29 2016 Nicholas Hughes, Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+- Introduced rsyslog rule orders so messages hit 'stop' rules before they
+  reach 'catch-alls'.  By doing so, log duplication is prevented.
+- Modified the spooler log local rule to ensure both uucp and news
+  facilities are logged in spooler.log.
+
+* Wed Nov 23 2016 Jeanne Greulich <jgreulich.simp@onyxpoint.com> - 2.0.0-0
+- update requirement versions
+
+* Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
+- Remove compliance map and General housekeeping
+
+* Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.0-0
+- Updated iptables dependency version
+- Updated openldap dependency version
+
+* Tue Oct 25 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+- Added logic to ensure simp::puppetdb manages the puppetserver service via
+  pupmod::master::base, NOT puppetdb::master::config.
+- Included the puppetdb::master::config class.
+- Updated spec.
+
+* Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Updated to support Puppet 4 with the latest Puppet Server and PuppetDB
+- Foundation for SIMP 6
+- Will *not* work with any Puppet < 4
+
+* Mon Oct 10 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.10-0
+- Ensured netlabel_tools is installed.
+
+* Mon Oct 3 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.2.9-0
+- Added Elasticsearch and Grafana Keys to yum config
+
+* Thu Sep 29 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.2.8-0
+- Fixed beaker reference in Gemfile.
+
+* Tue Aug 09 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.7-0
+- Fixed an invalid data type in simp::nfs::export_home.
+
+* Tue Aug 02 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.6-0
+- Update to the new naming convention
+
+* Wed Jul 20 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.5-0
+- Migrated create_home_dirs from nfs.
+- Modified create_home_dirs to use ruby-net-ldap.
+
+* Wed Jul 13 2016 Nick Miller <nick.miller@onyxpoint.com> - 1.2.4-0
+- Yum repos now default to https with sslverify=false
+
+* Mon Jul 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.3-0
+- Migration to semantic versioning and fix of the build system
+
+* Sat May 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.2-0
+- Spec test fixes
+
+* Wed May 11 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.2-0
+- Added a hook to control SSLVerifyClient in ks.conf.  Defaults
+  to 'optional'.
+
+* Wed Apr 13 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.2.1-0
+- Svckill now ignores quotaon and messagebus in RHEL/CentOS 7
+
+* Mon Mar 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.0-0
+- Moved to Semantic Versioning 2.0
+- Ensure that SSSD is used for systems EL6.7+
+- Removed RPM dependency on simp-bootstrap as it is not technically required.
+- Test against Puppet 4.3.2
+
+* Tue Mar 08 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-9
+- Updated a bad default for nfs_server in the home_client class, which
+  otherwise had the potential to render a nil server value, and
+  break automounting.
+
+* Wed Feb 24 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-8
+- Updated the mcollective stock class and added appropriate spec and unit
+  testing for full functionality test coverage.
+
+* Fri Feb 19 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.1.0-8
+- Added compliance function support
+
+* Mon Dec 28 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-7
+- Updated minor logic in simp::yum for flexibility.
+
+* Thu Dec 24 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-6
+- Add management for the paths that the simp helper commands expect. This is
+  particularly relevant when not installing via RPM
+
+* Thu Nov 12 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-5
+- Now use the 'operatingsystem*' facts instead of the 'lsb*' facts
+- Updated to require 'simplib' and 'simpcat' instead of 'common', 'functions', and 'concat'
+- Ensure that sssd is used by EL >= 7 due to fatal bugs in nscd and nslcd on these platforms.
+
+* Fri Oct 16 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-4
+- Modified stock puppetdb class defaults to conform with upgraded
+  puppetdb module.
+
+* Fri Sep 18 2015 Kendall Moore <kmoore@keywcorp.com> - 1.1.0-3
+- Set the keylength to 2048 in puppet.conf during the execution of runpuppet
+  if FIPS is enabled.
+
+* Thu Sep 10 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-2
+- In runpuppet, run fixfiles before the final passes if selinux is enabled.
+- Selbool use_nfs_home_dirs set to 1 if remote nfs server used for
+  home directories.
+
+* Fri Jul 31 2015 Kendall Moore <kmoore@keywcorp.com> - 1.1.0-1
+- Added support for the updated rsyslog module.
+
+* Thu Apr 02 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
+- Added PuppetDB support
+
+* Thu Apr 02 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-7
+- Modified runpuppet script to ensure the puppetserver service is running
+  before puppet runs.
+
+* Thu Feb 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-6
+- Migrated to the new 'simp' environment.
+
+* Wed Jan 14 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-6
+- Re-created the MCollective stock class, now with SSL fully enabled.
+
+* Tue Nov 25 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-5
+- Updated the default GPG key list.
+- Updated the rsyslog stock classes to remove stunnel support and,
+  instead, take advantage of the native TLS support in rsyslog.
+- NOTE: This requires changing the global 'log_server' variable in
+  Hiera to a 'log_servers' Array which is done in the %post section of
+  this RPM.
+
+* Thu Nov 06 2014 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.0-5
+- Removed sssd::conf as it is no longer needed and causes duplicate
+  concat_fragment error
+
+* Fri Oct 31 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-4
+- Moved the mcollective IPTables and package material into the main
+  SIMP module.
+- Update to account for the stunnel module updates in 4.2.0-0
+
+* Fri Sep 19 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-3
+- Updated the nfs::home_client class to properly account for the port
+  setting in the mounts.
+
+* Tue Aug 19 2014 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-2
+- Differentiated the rsync module paths between 4.X and 5.X distributions.
+  4.X should not include the distribution and release in the path.
+
+* Mon Aug 18 2014 Kendall Moore <kmoore@keywcorp.com> - 1.0.0-2
+- Updated the digest_algorithm in the runpuppet script to be SHA-256.
+
+* Fri Aug 08 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-1
+- Ensure that runpuppet returns '1' when queried for status so that
+  svckill doesn't continually attempt to disable it.
+
+* Fri Jul 25 2014 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-0
+- Ensured /srv/www/yum/SIMP is created if SIMP version < 5.
+
+* Mon Jul 21 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
+- /var/nfs is used for NFS in SIMP>=5 and /srv/nfs otherwise
+- Updated yum and kickstart to use /var/www if SIMP>=5 and /srv/www
+  otherwise
+
+* Mon Jul 21 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-4
+- Updated to use the new rsync path.
+
+* Tue Jul 15 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-4
+- Updated to support the RHEL7 repo GPG keys.
+
+* Tue Jul 15 2014 Kendall Moore <kmoore@keywcorp.com> - 0.0.1-4
+- Added CentOS as a supported OS as a part of CentOS 7 upgrade.
+
+* Thu Jun 19 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-3
+- Separated out the RHEL6/7 package requirements appropriately.
+
+* Thu Jun 12 2014 Nick Markowski <nmarkowski@keywcorp.com> - 0.0.1-2
+- Ntp servers can be passed to kickstart as an array of server names
+  or a hash of server => 'option' pairs.
+
+* Fri May 16 2014 Kendall Moore <kmoore@keywcorp.com> - 0.0.1-1
+- Added stock classes for FreeRADIUS
+- Added stock classes for Ganglia
+- Added stock classes for RSyslog
+- Added stock classes for krb5
+- Added stock classes for MRepo
+- Added stock classes for SNMP
+
+* Tue May 13 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-1
+- Added a quiet_puppet variable to runpuppet for the cert download
+  segment.
+
+* Mon May 05 2014 Kendall Moore <kmoore@keywcorp.com> - 0.0.1-0
+- Added stock classes for NFS home directories.
+
+* Fri Mar 21 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-0
+- Initial Release
+- Ported all materials from the old default_classes directory.
+- Incorporated several parts of sec and common as appropriate to the
+  separation of duties.

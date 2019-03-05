@@ -1,0 +1,18 @@
+<% case @def_type
+    when 'host'
+      symbol = '@'
+    when 'user'
+      symbol = ':'
+    when 'runas'
+      symbol = '>'
+    when 'cmnd'
+      symbol = '!'
+    else
+      symbol = ''
+    end -%>
+<% if @target
+    symbol = "#{symbol}#{@target}"
+end -%>
+
+Defaults<%= symbol %>    <%= Array(@content).join(', ') %>
+

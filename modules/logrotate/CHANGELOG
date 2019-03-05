@@ -1,0 +1,119 @@
+* Thu Nov 01 2018 Jeanne Greulich <jeanne,greulich@onyxpoint.com> - 6.3.0-0
+- static asset updates for puppet 5
+
+* Mon Oct 01 2018 Nick Miller <nick.miller@onyxpoint.com> - 6.3.0-0
+- Added OEL and Puppet 5 support
+- Add some previously impossible to configure options
+  - the hourly rotate period
+  - dateyesterday
+  - shred and shredcycles
+  - su and su_user and su_group (inapplicable on EL6)
+- Added Logrotate::Periods type alias which allows hourly rotation
+
+* Mon Jul 02 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 6.2.0-0
+- Move SIMP-specific logrotate rules to a SIMP-managed configuration
+  directory, /etc/logrotate.simp.d, and ensure logrotate processes
+  that directory first. This ensures SIMP rules take priority, when
+  duplicate rules are specified.
+
+* Thu Nov 30 2017 Steven Pritchard <steven.pritchard@onyxpoint.com> - 6.1.2-0
+- Update README.md from puppet strings
+
+* Fri Sep 01 2017 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 6.1.1-0
+- Updated the defaults  settings for compress, rotate and dateext in rule.pp
+  to pull values from init.pp. (They were hard coded to them before)
+- changed templates to add nodateext if dateext is set to false.
+
+* Thu Apr 13 2017 Nick Markowski <nmarkowski@keywcorp.com> - 6.1.0-0
+- Added lastaction logic to logrotate::rule.
+- Update puppet requirement and remove OBE pe requirement in metadata.json
+
+* Fri Dec 16 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 6.0.0-0
+- Updated for Puppet 4
+- Renamed the `logrotate::add` defined type to `logrotate::rule`
+
+* Fri Nov 18 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
+- Updated to compliance_markup version 2
+
+* Tue Feb 23 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-4
+- Added compliance function support
+
+* Tue Jan 26 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-3
+- Normalized common static module assets
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-2
+- Changed puppet-server requirement to puppet
+
+* Mon Aug 25 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-1
+- The upgrade to ruby 2.0 caused empty includes with arrays of length 0.
+
+* Sun Mar 02 2014 Kendall Moore <kmoore@keywcorp.com> - 4.1.0-0
+- Refactored to pass all lint tests and be compatible with hiera and puppet 3.
+- Added rspec tests for test coverage.
+
+* Thu Feb 13 2014 Kendall Moore <kmoore@keywcorp.com> - 4.0.0-10
+- Converted all string booleans into native booleans.
+
+* Mon Oct 07 2013 Kendall Moore <kmoore@keywcorp.com> - 4.0.0-9
+- Updated all erb templates to properly scope variables.
+
+* Tue Jul 09 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-8
+- Fixed a typo whereby 'include' statements were not processed due to
+  extraneous double quotes.
+- Moved the tabooext option outside of the main option set since, according to
+  the docs, it simply overwrites or appends to the previous value anyway.
+
+* Thu Jan 24 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-7
+- Created a Cucumber test that ensures logrotate is working by creating a test log.
+
+* Tue Oct 23 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-6
+- Changed the default configuration so that empty files no longer get rotated.
+
+* Fri Aug 17 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-5
+- Added the dateext -%Y%m%d.%s so that logs can be rotated multiple times per day.
+- Added a default rotate size of 500M to attempt to ensure that the /var/log
+  filesystem doesn't rapidly fill.
+- Moved the 'conf' portion into the logrotate class by converting it to a
+  parameterized class.
+
+* Thu Jun 07 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-4
+- Ensure that Arrays in templates are flattened.
+- Call facts as instance variables.
+- Moved mit-tests to /usr/share/simp...
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Mar 02 2012 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-3
+- Improved test stubs.
+
+* Mon Dec 26 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-2
+- Updated the spec file to not require a separate file list.
+
+* Mon Dec 05 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-1
+- Modified the logrotate 'conf' template to properly detect dateext and flipped
+  the dateext variable so that existing systems continue to work the same way.
+
+* Mon Nov 07 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Set $sharedscripts to 'true' by default.
+
+* Sat Jun 25 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-2
+- No longer manage /etc/logrotate.conf by default.
+- Provide a define, logrotate::conf, for customization of /etc/logrotate.conf
+- Ensure that the logrotate package is installed and up to date.
+
+* Mon Apr 18 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-1
+- Changed puppet://$puppet_server/ to puppet:///
+
+* Tue Jan 11 2011 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-1
+- Converting all spec files to check for directories prior to copy.
+
+* Fri May 21 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0-0
+- Doc update and code refactor
+
+* Thu Jan 28 2010 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.1-1
+- Changed the default 'rotate' value to 4 instead of 7.
+
+* Wed Nov 04 2009 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.1-0
+- Initial module release.

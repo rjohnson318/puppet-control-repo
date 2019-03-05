@@ -1,0 +1,180 @@
+* Tue Sep 11 2018 Nicholas Markowski <nicholas.markowski@onyxpoint.com> - 5.2.0-0
+- Updated $app_pki_external_source to accept any string. This matches the
+  functionality of pki::copy.
+- Update badges and contribution guide URL in README.md
+
+* Mon Sep 10 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 5.2.0-0
+- Update Hiera 4 to Hiera 5
+
+* Mon Jul 16 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.2.0-0
+- Ensure that only IPv4 is used if IPv6 is disabled on the system
+- Add support for OEL and Puppet 5
+
+* Tue Jun 19 2018 Nick Miller <nick.miller@onyxpoint.com> - 5.1.0-0
+- Avoid changing the permissions from the vendored RPM
+  - /etc/postfix/* perms from 0640 to 0644
+  - /usr/libexec/postfix management is no longer recursive
+  - /var/spool/mail perms from 0755 to 0775
+- Cleanup unneeded fixtures and update CI assets
+
+* Thu May 17 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 5.1.0-0
+- Added main_cf_hash parameter so a list of additional settings for main.cf
+  file can be added without the need for entering a resource for each one.
+- Added the smtpd_client_restrict entry to main.cf per the STIG.
+- Updated simpcat to concat.
+- Rearranged code into sub-classes to make it easier to follow.
+
+* Tue Mar 13 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.3-0
+- Ensure that only IPv4 is used if IPv6 is disabled on the system
+
+* Fri May 19 2017 Nick Miller <nick.miller@onyxpoint.com> - 5.0.2-0
+- Removed `audit` metaparameter
+- Implemented `package_ensure` catalyst
+- Cleaned up some code formatting
+- Update puppet requirement and remove OBE pe requirement in metadata.json
+
+* Tue Jan 10 2017 Nick Markowski <nmarkowski@keywcorp.com> - 5.0.1-0
+- Updated the pki scheme
+- Application certs now managed in /etc/pki/simp_apps/postfix/x509
+
+* Wed Jan 04 2017 Nick Miller <nick.miller@onyxpoint.com> - 5.0.1-0
+- Strong type module
+- Use simp_options catalyst lookups and parameter names
+
+* Tue Nov 22 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 5.0.0-0
+- Minor cleanup
+
+* Wed Nov 16 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 5.0.0-0
+- Updated iptables dependency version
+
+* Thu Nov 10 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 5.0.0-0
+- Eliminated use of deprecated Puppet.newtype
+- Updated to compliance_markup version 2
+
+* Fri Sep 30 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 5.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+
+* Wed Sep 28 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.1.4-0
+- Fix Forge `haveged` dependency name
+
+* Mon Jul 11 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.3-0
+- Migration to semantic versioning and fix of the build system
+- Added basic acceptance tests
+
+* Thu Jun 30 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.2-0
+- Use_haveged is now a global catalyst.
+
+* Mon Jun 27 2016 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.1-0
+- Pupmod-haveged included by default to assist with entropy generation.
+
+* Tue Feb 23 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 4.1.0-7
+- Added compliance function support
+
+* Mon Feb 15 2016 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-6
+- Removed common dependency (simplib takes care of it)
+
+* Mon Nov 09 2015 Chris Tessmer <chris.tessmer@onypoint.com> - 4.1.0-5
+- Migration to simplib and simpcat (lib/ only)
+
+* Thu Feb 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-4
+- Migrated to the new 'simp' environment.
+
+* Fri Jan 16 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-3
+- Changed puppet-server requirement to puppet
+
+* Tue Jun 24 2014 Nick Markowski <nmarkowski@keywcorp.com> - 4.1.0-2
+- Changed all checksums to sha256 instead of md5 in an effort to
+  enable FIPS.
+
+* Tue Mar 18 2014 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-1
+- Added rspec tests.
+- Removed the postfix::conf::main_cf::set define and replaced it with the
+  postfix_main_cf native type.
+- Updated all classes to be Puppet3 and Hiera compatible.
+- Fleshed out the postfix::server class in such a way that it now provides a
+  fully functioning server when called.
+
+* Tue Jan 28 2014 Kendall Moore <kmoore@keywcorp.com> 4.1.0-0
+- Update to remove warnings about IPTables not being detected. This is a
+  nuisance when allowing other applications to manage iptables legitimately.
+
+* Fri Jul 26 2013 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.1-5
+- Updated to use simp_file_line instead of file_line from stdlib.
+
+* Tue Jan 15 2013 Maintenance
+2.0.1-4
+- Created a Cucumber test which installs and confiugres a postfix server and checks
+  to make sure a user is created and the postfix service is running.
+
+* Mon Aug 20 2012 Maintenance
+2.0.1-3
+- Ensure that /etc/postfix is world readable.
+
+* Wed Apr 11 2012 Maintenance
+2.0.1-2
+- Now use the Puppet Labs stdlib function 'file_line' instead of
+  'functions::append_if_no_such_line'
+- Moved mit-tests to /usr/share/simp...
+- Updated pp files to better meet Puppet's recommended style guide.
+
+* Fri Mar 02 2012 Maintenance
+2.0.1-1
+- Improved test stubs.
+
+* Wed Feb 22 2012 Maintenance
+2.0.1-0
+- Postfix now no longer attempts to copy the content of any file into
+  place except those that you piece together with the aliases
+  commands. It was simply too restrictive for successful mail server
+  usage.
+  was getting copied into /etc/postfix.
+- Loosened up some of the permissions to allow people to do crazy things in
+  their /etc/postfix directory manually if they so choose.
+
+* Mon Dec 26 2011 Maintenance
+2.0.0-4
+- Updated the spec file to not require a separate file list.
+
+* Mon Dec 05 2011 Maintenance
+2.0.0-3
+- Removed the conflicting 'tidy' statement from init.pp and replaced it with a
+  'purge' in the associated file statment.
+
+* Mon Oct 10 2011 Maintenance
+2.0.0-2
+- Modified all multi-line exec statements to act as defined on a single line to
+  address bugs in puppet 2.7.5
+
+* Mon Apr 18 2011 Maintenance - 2.0.0-1
+- Changed puppet://$puppet_server/ to puppet:///
+- Changed all instances of defined(Class['foo']) to defined('foo') per the
+  directions from the Puppet mailing list.
+- Updated to use concat_build and concat_fragment types
+
+* Tue Jan 11 2011 Maintenance
+2.0.0-0
+- Refactored for SIMP-2.0.0-alpha release
+
+* Tue Oct 26 2010 Maintenance - 1-1
+- Converting all spec files to check for directories prior to copy.
+
+* Mon May 24 2010 Maintenance
+1.0-0
+- Doc update and code refactor.
+
+* Thu Jan 28 2010 Maintenance
+0.1-11
+- Root's .muttrc now properly points to /var/spool/mail/root for newly delivered
+  mail and pulls it into a Maildir in ~root/Maildir.
+
+* Wed Dec 16 2009 Maintenance
+0.1-10
+- Added a conf::main_cf::set define that calls the postconf application to set
+  any value in main.cf that you like.
+
+* Fri Dec 04 2009 Maintenance
+0.1-9
+- Removed dependence on rsync.
+- Added templates for files that should be templated.
+- Moved static files into 'files' section of the module.

@@ -1,0 +1,40 @@
+# This file managed by puppet.
+# Any changes that you make will be reverted on the next puppet run.
+
+<%= @rotate_period %>
+rotate <%= @rotate %>
+<% if @create -%>
+create
+<% end -%>
+<% if @compress -%>
+compress
+<% end -%>
+<% if @dateext -%>
+dateext
+dateformat <%= @dateformat %>
+<%   if @dateyesterday -%>
+    dateyesterday
+<%   end -%>
+<% else -%>
+nodateext
+<% end -%>
+<%
+  ([@configdir] + Array(@include_dirs)).flatten.each do |_dir|
+-%>
+include <%= _dir %>
+<% end -%>
+
+<% if @minsize -%>
+minsize <%= @minsize %>
+<% elsif @maxsize -%>
+maxsize <%= @maxsize %>
+<% end -%>
+
+<% if @manage_wtmp -%>
+/var/log/wtmp {
+    monthly
+    minsize 1M
+    create 0664 root utmp
+    rotate 1
+}
+<% end -%>

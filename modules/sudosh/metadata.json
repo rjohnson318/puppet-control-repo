@@ -1,0 +1,62 @@
+{
+  "name": "simp-sudosh",
+  "version": "6.1.0",
+  "author": "SIMP Team",
+  "summary": "Manage sudosh",
+  "license": "Apache-2.0",
+  "source": "https://github.com/simp/pupmod-simp-sudosh",
+  "project_page": "https://github.com/simp/pupmod-simp-sudosh",
+  "issues_url": "https://simp-project.atlassian.net",
+  "tags": [
+    "simp",
+    "sudosh",
+    "audit"
+  ],
+  "dependencies": [
+    {
+      "name": "simp/simplib",
+      "version_requirement": ">= 3.1.0 < 4.0.0"
+    },
+    {
+      "name": "simp/logrotate",
+      "version_requirement": ">= 6.1.0 < 7.0.0"
+    },
+    {
+      "name": "simp/rsyslog",
+      "version_requirement": ">= 7.0.0 < 8.0.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.0 < 5.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.10.4 < 6.0.0"
+    }
+  ]
+}

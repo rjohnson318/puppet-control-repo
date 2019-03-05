@@ -1,0 +1,14 @@
+---
+lookup_options:
+  vox_selinux::boolean:
+    merge: hash
+  vox_selinux::fcontext:
+    merge: hash
+  vox_selinux::module:
+    merge: hash
+  vox_selinux::permissive:
+    merge: hash
+  vox_selinux::port:
+    merge: hash
+  vox_selinux::exec_restorecon:
+    merge: hash

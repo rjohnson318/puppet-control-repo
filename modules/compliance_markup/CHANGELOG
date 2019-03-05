@@ -1,0 +1,174 @@
+* Fri Nov 02 2018 Steven Pritchard <steven.pritchard@onyxpoint.com> - 2.4.1-0
+- Fix the following keys:
+  - simp::mountpoints::tmp::secure
+  - simp::root_user::manage_group
+  - simp::root_user::manage_perms
+  - simp::root_user::manage_user
+  - ssh::server::conf::pki
+
+* Wed Oct 31 2018 Steven Pritchard <steven.pritchard@onyxpoint.com> - 2.4.1-0
+- Fix the output of utils/compliance_map_migrate
+
+* Fri Oct 19 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.4.1-0
+- Fixed the following incorrect parameter types
+  - simp::yum::schedule::minute
+  - simp::yum::schedule::hour
+
+* Thu Sep 20 2018 Dylan Cochran <dylan.cochran@onyxpoint.com> - 2.4.0-0
+- Open-Source SCE version 2.0
+  - Add bugfix for environments that are just Strings vs Environment objects.
+  - Add compliance_markup::loaded_maps() function to return all of the loaded
+    compliance data from the puppetserver for debugging
+  - Add compliance_markup::telemetry() function to return filenames used to
+    load compliance data
+  - Add compliance_markup::debug::dump hiera parameter that dumps the cached
+    result hash for hiera debugging.
+  - Remove pupmod::ca_crl_pull_interval from nist_800_53_rev4.json's since
+    the parameter is deprecated.
+  - refactor loader to look in:
+    - "/SIMP/compliance_profiles"
+    - "/simp/compliance_profiles"
+    and for backwards compatbility:
+    - "/lib/puppetx/compliance"
+
+* Fri Aug 24 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.3.4-0
+- Change 'sudosh' to 'tlog' to support the switch to supported session logging
+  software
+- Added support for Puppet 5 and OEL
+- DISA STIG changes:
+  - Added selinux::login_resources
+  - Added gdm::settings
+  - Added gdm::banner
+  - Added gdm::simp_banner
+  - Added gdm::dconf_hash
+  - Added gnome::dconf_hash
+
+* Thu Jun 28 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.4-0
+- DISA STIG changes:
+  - Updated for pupmod-simp-auditd 8.0.0.  This enforces the
+    'stig' audit profile, instead of the 'simp' audit profile.
+
+* Mon Jun 11 2018 Nick Miller <nick.miller@onyxpoint.com> - 2.3.4-0
+- DISA STIG changes:
+  - Added auditd::config::audit_profiles::simp::audit_crontab_cmd
+  - Added auditd::config::audit_profiles::simp::audit_pam_timestamp_check_cmd
+  - Added auditd::config::audit_profiles::simp::audit_passwd_cmds
+  - Added auditd::config::audit_profiles::simp::audit_postfix_cmds
+  - Added auditd::config::audit_profiles::simp::audit_priv_cmds
+  - Added auditd::config::audit_profiles::simp::audit_ssh_keysign_cmd
+
+* Wed Jun 06 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.3.4-0
+- DISA STIG changes:
+  - Added auditd::config::audit_profiles::simp::audit_session_files
+  - Added auditd::config::audit_profiles::simp::audit_session_files_tag
+
+* Wed Jun 06 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.4-0
+- DISA STIG changes:
+  - Added auditd::action_mail_acct entries
+  - Added auditd::config::audit_profiles::simp::audit_sudoers
+  - Added auditd::config::audit_profiles::simp::audit_selinux_cmds
+  - Added auditd::failure_mode
+  - Corrected auditd::enable identifiers
+
+* Fri May 18 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 2.3.4-0
+- Added postfix main.cf settings to el7 DISA STIG.
+
+* Wed May 16 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.4-0
+- Added aide::aliases entries for DISA STIG
+- Replaced OBE simp::yum::enable_auto_updates entries with
+  simp::yum::schedule::enable in all profiles
+- Added and updated simp::yum::schedules entries for DISA STIG
+- Added simp::sysctl entries to the DISA STIG profiles for
+  net.ipv4.conf.default.accept_source_route,
+  net.ipv4.conf.default.send_redirects, and
+  net.ipv6.conf.all.accept_source_route.
+
+* Fri May 04 2018 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 2.3.4-0
+- Added and updated ssh::server::conf entries for DISA STIG
+
+* Mon Apr 30 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.3.4-0
+- Added 'svckill::mode' to be 'enforcing' in STIG and 800-53 modes
+
+* Fri Apr 27 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.4-0
+- Fixed the inappropriate value of useradd::useradd::inactive in
+  the DISA STIG profiles.  It is now set to 0.
+
+* Fri Mar 30 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.3.4-0
+- Update PAM settings in the `disa_stig` profile
+- Fixed issues with the compliance_map logic that were causing false results to
+  be added to the 'documented_missing_parameters' and
+  'documented_missing_resources' lists
+
+* Tue Mar 06 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.3-0
+- Updated TMOUT setting in /etc/profile.d/simp.sh to match EL7 STIG
+  setting (Reference: RHEL-07-040160)
+- Added missing audispd program to simp_rsyslog::default_logs
+- Added missing ' IPT:' message start to simp_ryslog::default_logs.
+  This is required for iptables violation messages because some
+  versions of rsyslog add a space separating the message
+  timestamp/id and the message.
+
+* Wed Dec 13 2017 Nick Markowski <nicholas.markowski@onyxpoint.com> - 2.3.3-0
+- Further aligned the EL7 disa_stig profile with scap-security-guide 0.1.33-5
+  - Added oval-ids to map puppet parameters to openscap tests and SIMP
+    remediations.  Note this mapping is NOT complete.
+- See simp/doc for a policy evaluation response report for CentOS 7
+  - Includes remedies and justifications to address failures in
+    the openscap scan
+
+* Wed Nov 15 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.3.3-0
+- Aligned the EL7 disa_stig profile with the latest SSG content
+- Fixed several parameters with incorrect data types
+
+* Mon Oct 03 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 2.3.2-0
+- Fix discrepancies between NIST and DISA compliance profiles
+
+* Fri Sep 22 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 2.3.1-0
+- Refactor report generator to use a shared file format parser/compiler.
+- Add vendored 'profiles-in-modules' support
+
+* Tue Sep 19 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 2.3.1-0
+- Remove test link to allow module to be published to PuppetForge
+
+* Tue Sep 05 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 2.3.0-0
+- Converted compliance profiles to JSON.  This allows non-string values
+  and faster deserialization.
+- Provided scripts in 'utils/' to convert the compliance profiles from
+  YAML to JSON and vice versa.
+
+* Mon Jun 16 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 2.2.0-0
+- Added a compliance enforcement hierav3 and hierav5 backend.
+
+* Sat Jun 10 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-0
+  - Documented the report format in the README
+  - Added the defaut SIMP compliance profiles to the module data
+  - Enhanced the lookup mapper function to take an optional default map
+  - Passed the internal data as the default map
+  - Added client metadata to the compliance report for easier analysis
+  - Fixed several minor processing bugs
+  - Added the documented, but missing, regular expression match capability
+  - Confine puppet version in metadata.json
+
+* Tue Feb 28 2017 Nick Miller <nick.miller@onyxpoint.com> - 2.0.1-0
+  - travis.yml and gemfile updates
+
+* Fri Oct 28 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+  - New map format
+  - New output format
+    - Added compliant values
+    - Added missed parameters
+    - Added missing class references
+    - Added server-side storage
+  - Added a conversion utility in the 'utils' directory
+
+* Wed Sep 28 2016 Chris Tessmer <ctessmer@onyxpoint.com> - 1.0.1-0
+  - Move GitHub org from `onyxpoint` to `simp`
+
+* Sun Jul 03 2016 Chris Tessmer <ctessmer@onyxpoint.com> - 1.0.0-0
+  - Move Forge org from `onyxpoint` to `simp`
+  - Provide Ruby 1.8.7 compatibility
+  - Ensure that a report is written on every run.
+  - Updated to properly handle the hash references
+
+* Mon Dec 07 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 0.0.1-0
+  - Initial Release

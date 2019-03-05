@@ -1,0 +1,16 @@
+---
+appveyor.yml:
+  delete: true
+Rakefile:
+  extra_disabled_lint_checks:
+  - 'disable_only_variable_string'
+spec/spec_helper.rb:
+  allow_deprecations: true
+.travis.yml:
+  env:
+    global:
+      - "PARALLEL_TEST_PROCESSORS=16 # reduce test parallelism to prevent overloading containers"
+  extras:
+    - rvm: 2.1.9
+      script: bundle exec rake rubocop
+

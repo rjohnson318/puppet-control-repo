@@ -1,0 +1,45 @@
+language: ruby
+dist: precise
+sudo: required
+rvm:
+  - 2.1.9
+  # Ruby with Puppet 5
+  - 2.4.0
+notifications:
+  email:
+   - raphael.pinson@camptocamp.com
+env:
+# base env
+  # Test Puppet 4
+  - PUPPET=4.0 RUBY_AUGEAS=0.5
+  # Test Oldest Puppet, Inc. supported Puppet
+  - PUPPET=4.7.1 RUBY_AUGEAS=0.5 FORGE_PUBLISH=true
+  # Test latest Puppet version
+  - PUPPET=5.0 RUBY_AUGEAS=0.5
+
+matrix:
+  fast_finish: true
+  exclude:
+    # base exclude
+    # No support for Ruby 2.1.9 in Puppet 5
+    - rvm: 2.1.9
+      env: PUPPET=5.0 RUBY_AUGEAS=0.5
+
+install:
+  - "travis_retry ./.travis.sh"
+script:
+  - AUGEAS_LENS_LIB=lib/augeas/lenses:augeas/lenses bundle exec rake
+  # Do not include the augeas/ directory in the deployed module
+  - rm -rf augeas/
+deploy:
+  provider: puppetforge
+  user: herculesteam
+  password:
+    secure: "coX6r+20OFHKTVGYb4E+1lr4AFCG5h1GeqjWY0Esfz5vAs42d/ZbLzwP6j19VXWehBitGRWkBerWU9ZIneIcPUQlRhRRCWt+XCv+6XZREdq2610RIZnva4NsLD/SCzXdC9gSfIWvGnI9fWNAQS/stgC/jkyCkFNn2i0s7qWEvA0="
+  on:
+    tags: true
+    # all_branches is required to use tags
+    all_branches: true
+    # Only publish if our main Ruby target builds
+    rvm: 2.1.9
+    condition: "$FORGE_PUBLISH = true"
